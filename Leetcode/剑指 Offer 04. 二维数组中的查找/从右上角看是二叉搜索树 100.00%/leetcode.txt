@@ -1,0 +1,26 @@
+class Solution {
+    public boolean findNumberIn2DArray(int[][] matrix, int target) {
+        if (matrix.length == 0 || matrix[0].length == 0) {
+            return false;
+        }
+        return find(matrix, 0, matrix[0].length - 1, target);
+    }
+
+    public boolean find(int[][] matrix, int row, int col, int target) {
+        boolean flag1 = false;
+        boolean flag2 = false;
+        // System.out.println("m[" + row + "][" + col + "]:" + matrix[row][col]);
+        if (matrix[row][col] == target) {
+            return true;
+        } else if (matrix[row][col] > target) {
+            if (col - 1 >= 0 ) {
+                flag1 = find(matrix, row, col - 1, target);
+            }
+        } else {
+            if (row + 1 < matrix.length) {
+                flag2 = find(matrix,row + 1, col, target);
+            }
+        }
+        return flag1 || flag2;
+    }
+}

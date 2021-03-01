@@ -1,0 +1,12 @@
+class Solution {
+    public int add(int a, int b) {
+        //a 非进位的部分
+        //b 进位的部分
+        while(b!=0){
+            int cache=a&b;
+            a^=b;
+            b=cache<<1;
+        }
+        return a;
+    }
+}

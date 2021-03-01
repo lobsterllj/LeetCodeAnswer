@@ -1,0 +1,28 @@
+class Solution {
+    public int strStr(String haystack, String needle) {
+        int lenN = needle.length();
+        if (lenN == 0)
+            return 0;
+        int lenH = haystack.length();
+        if (lenH < lenN)
+            return -1;
+        
+        char[] charsH = haystack.toCharArray(); 
+        char[] charsN = needle.toCharArray();
+
+        
+        for (int i = 0; i < lenH - lenN + 1; ++i){
+            if (charsH[i] == charsN[0]){
+                int pH = 0;
+                while (pH < lenN){
+                    if(charsH[i + pH] != charsN[pH])
+                        break;
+                    pH++;
+                }
+                if (pH == lenN)
+                    return i;
+            }
+        } 
+        return -1;
+    }
+}

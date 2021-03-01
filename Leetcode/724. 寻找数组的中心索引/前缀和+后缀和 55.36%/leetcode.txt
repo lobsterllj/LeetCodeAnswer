@@ -1,0 +1,23 @@
+class Solution {
+    public int pivotIndex(int[] nums) {
+        int len = nums.length;
+        if (len == 0)
+            return -1;
+        int[] L2R = new int[len];
+        int[] R2L = new int[len];
+
+        for (int i = 1; i < len; ++i){
+            L2R[i] = L2R[i - 1] + nums[i - 1];
+        }
+
+        for (int i = len - 2; i > -1; --i){
+            R2L[i] = R2L[i + 1] + nums[i + 1];
+        }
+
+        for (int i = 0; i < len; ++i){
+            if (L2R[i] == R2L[i])
+                return i;
+        }
+        return -1;
+    }
+}

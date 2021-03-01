@@ -1,0 +1,38 @@
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> res = new LinkedList<>();
+        if (nums.length < 3)
+            return res;
+        Arrays.sort(nums);
+        int mid;
+        int large;
+        for (int i = 0; i < nums.length - 2; ++i) {
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
+
+            if (nums[i] > 0)
+                return res;
+            mid = i + 1;
+            large = nums.length - 1;
+            while (mid < large) {
+                if (nums[i] + nums[mid] + nums[large] == 0) {
+                    res.add(Arrays.asList(nums[i], nums[mid], nums[large]));
+                    mid++;
+                    large--;
+                    while (nums[mid] == nums[mid - 1]&&mid<large) {
+                        mid++;
+                    }
+                    while (nums[large] == nums[large + 1]&&mid<large) {
+                        large--;
+                    }
+                } else if (nums[i] + nums[mid] + nums[large] < 0) {
+                    mid++;
+                } else {
+                    large--;
+                }
+            }
+        }
+        return res;
+    }
+}

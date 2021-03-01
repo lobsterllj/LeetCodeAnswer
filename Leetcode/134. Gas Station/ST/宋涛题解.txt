@@ -1,0 +1,31 @@
+解题思路
+没想到直接0ms，其实在《数据结构与算法：Java语言描述》一书中，我记得第一章就有一个求最大和子序列的题目（如果都小于0，则返回-1），当时的思路也是如果某一个子序列和为负数，那么这个子序列不可能作为最大子序列的开头，直接以末尾的下一个值作为开头重新计算。
+中间需要保存从位置0开始的所有缺油量，当遍历完数列后，如果剩余油量+缺油量>0（缺油量为负数），那么有解，返回i；
+
+代码
+
+class Solution {
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        int i = 0;//起点
+        int left = 0;//油箱剩余油量
+        int need = 0;//油箱缺值
+        for(int j = 0;j<cost.length;j++){
+            if(left>=0){
+                left += gas[j]-cost[j];
+            }else{
+                i = j;
+                need += left;
+                left = gas[j]-cost[j];
+            }
+        }
+        if(left+need>=0)
+            return i;
+        else
+            return -1;
+    }
+}
+
+作者：shi-yu-forever
+链接：https://leetcode-cn.com/problems/gas-station/solution/zuo-guo-lei-si-de-bu-yao-jiao-ao-shuo-ming-ti-lian/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。

@@ -1,0 +1,30 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode mirrorTree(TreeNode root) {
+        if(root==null)
+            return root;
+        Deque<TreeNode> unvisited=new LinkedList<>();
+        unvisited.addLast(root);
+        while(!unvisited.isEmpty()){
+            TreeNode temp=unvisited.pollFirst();
+            TreeNode cache=temp.left;
+            temp.left=temp.right;
+            temp.right=cache;
+            if(temp.left!=null){
+                unvisited.addLast(temp.left);
+            }
+            if(temp.right!=null){
+                unvisited.addLast(temp.right);
+            }
+        }
+        return root;
+    }
+}

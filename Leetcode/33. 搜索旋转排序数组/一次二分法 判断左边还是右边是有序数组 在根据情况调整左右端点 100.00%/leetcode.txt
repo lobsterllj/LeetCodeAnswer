@@ -1,0 +1,38 @@
+class Solution {
+    public int search(int[] nums, int target) {
+        int n = nums.length;
+        if (n == 0) {
+            return -1;
+        }
+        if (n == 1) {
+            return nums[0] == target ? 0 : -1;
+        }
+        
+        int lo = 0;
+        int hi = n - 1;
+        int com;
+
+        while (lo <= hi){
+            com = (lo + hi) >>> 1;            
+            if (nums[com] == target)
+                return com;
+            
+            
+            if (nums[lo] <= nums[com]){
+                //[lo, com] 有序
+                if (nums[lo] <= target && target < nums[com])
+                    hi = com - 1;
+                else
+                    lo = com + 1;
+            }else{
+                //[com, hi] 有序
+                if (nums[com] < target && target <= nums[hi])
+                    lo = com + 1;
+                else
+                    hi = com - 1;
+            }
+        }
+
+        return -1;
+    }
+}

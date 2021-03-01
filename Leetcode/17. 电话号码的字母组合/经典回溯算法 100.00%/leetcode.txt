@@ -1,0 +1,40 @@
+class Solution {
+    char[][] button = new char[][]{
+            {'a', 'b', 'c'},
+            {'d', 'e', 'f'},
+            {'g', 'h', 'i'},
+            {'j', 'k', 'l'},
+            {'m', 'n', 'o'},
+            {'p', 'q', 'r', 's'},
+            {'t', 'u', 'v'},
+            {'w', 'x', 'y', 'z'}
+    };
+    int lenD;
+
+    public List<String> letterCombinations(String digits) {
+        List<String> res = new ArrayList<>();
+        lenD = digits.length();
+        if (lenD == 0)
+            return res;
+        char[] digitsChar = digits.toCharArray();
+
+        StringBuilder cache = new StringBuilder();
+        recall(res, cache, digitsChar, 0);
+
+        return res;
+    }
+
+    public void recall(List<String> res, StringBuilder cache, char[] digitsChar, int index) {
+        if (cache.length() == lenD) {
+            res.add(cache.toString());
+            return;
+        }
+        int num = digitsChar[index] - '2';
+        for (int i = 0; i < button[num].length; ++i) {
+            cache.append(button[num][i]);
+            recall(res, cache, digitsChar, index + 1);
+            cache.deleteCharAt(cache.length() - 1);
+        }
+
+    }
+}

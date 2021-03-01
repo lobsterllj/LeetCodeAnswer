@@ -1,0 +1,20 @@
+class Solution {
+    public int[][] flipAndInvertImage(int[][] A) {
+        int n = A.length;
+        int n_2 = (n >> 1);
+        int cache = 0;
+        for (int row = 0; row < n; ++row){
+            for (int col = 0; col < n_2; ++col){
+                cache = A[row][col];
+                A[row][col] = A[row][n - col - 1] == 1 ? 0 : 1;
+                A[row][n - col - 1] = cache == 1 ? 0 : 1;
+            }
+        }
+        if (n % 2 == 1){
+            for (int row = 0; row < n; ++row){
+                A[row][n_2] = A[row][n_2] == 1 ? 0 : 1;
+            }
+        }
+        return A;
+    }
+}

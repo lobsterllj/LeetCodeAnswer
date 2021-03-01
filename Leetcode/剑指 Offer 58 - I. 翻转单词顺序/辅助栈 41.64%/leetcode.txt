@@ -1,0 +1,32 @@
+class Solution {
+    public String reverseWords(String s) {
+        int len=s.length();
+        if(len==0)
+            return "";
+        Deque<String> visited=new ArrayDeque<>();
+
+        char[] chars=s.toCharArray();
+        int index=0;
+        while(index<len){
+            //
+            if(chars[index]==' ')
+                index++;
+            else{
+                StringBuilder cache=new StringBuilder();
+                while(index<len&&chars[index]!=' '){
+                    cache.append(chars[index]);
+                    index++;
+                }
+                visited.addLast(cache.toString());
+            }
+        }
+        StringBuilder res=new StringBuilder();
+        while(!visited.isEmpty()){
+            res.append(visited.pollLast());
+            res.append(" ");
+        }
+        if(res.length()>0)
+            res.deleteCharAt(res.length()-1);
+        return res.toString();
+    }
+}

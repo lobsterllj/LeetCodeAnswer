@@ -1,0 +1,38 @@
+class KthLargest {
+    PriorityQueue<Integer> minheap;
+    int k;
+    public KthLargest(int k, int[] nums) {
+        minheap = new PriorityQueue<>((a, b) -> a - b);
+        this.k = k;
+        int index = 0;
+        while (index < nums.length){
+            if (minheap.size() < k){
+                minheap.add(nums[index++]);
+                continue;
+            }
+            if (nums[index] > minheap.peek()){
+                minheap.poll();
+                minheap.add(nums[index]);
+            }
+            index++;
+        }
+    }
+    
+    public int add(int val) {
+        if (minheap.size() < k){
+            minheap.add(val);
+            return minheap.peek();
+        }
+        if (val > minheap.peek()){
+            minheap.poll();
+            minheap.add(val);
+        }
+        return minheap.peek();
+    }
+}
+
+/**
+ * Your KthLargest object will be instantiated and called as such:
+ * KthLargest obj = new KthLargest(k, nums);
+ * int param_1 = obj.add(val);
+ */

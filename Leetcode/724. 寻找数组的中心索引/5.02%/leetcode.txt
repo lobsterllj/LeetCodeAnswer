@@ -1,0 +1,36 @@
+class Solution {
+    public int pivotIndex(int[] nums) {
+        int returnindex=0;/* 返回值*/
+        int nums_l=0;
+        int nums_r=0;
+        int notfound=1;
+        for(int i =0;i<nums.length;i++)
+        {
+            nums_l=0;
+            nums_r=0;
+            for(int j=0;j<nums.length;j++)
+            {
+                if(j<i)
+                {
+                    nums_l+=nums[j];
+                }
+                else if(j>i)
+                {
+                    nums_r+=nums[j];
+                }
+            }
+            if(nums_r==nums_l)
+                {
+                    returnindex=i;
+                    notfound=0;
+                    break;
+                }
+            
+        }
+        if(notfound==1)
+        {
+            returnindex=-1;
+        }
+         return returnindex;
+    }
+}

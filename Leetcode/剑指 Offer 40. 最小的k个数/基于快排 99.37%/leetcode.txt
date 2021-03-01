@@ -1,0 +1,44 @@
+class Solution {
+    public int[] getLeastNumbers(int[] arr, int k) {
+        if (k == 0)
+            return new int[]{};
+        int[] res = new int[k];
+        quickpartion(arr, 0, arr.length - 1, k);
+        int index = 0;
+        while (index < k)
+            res[index] = arr[index++];
+        return res;
+    }
+
+
+    public int quickpartion(int[] arr, int sta, int end, int k) {
+        if(sta>=end)
+            return end;
+        int pivot = arr[sta];
+        int lessthanpivot = sta;
+        //all in[sta+1,lt] <pivot
+        //all in[lt+1,end] >=pivot
+        for (int i = sta + 1; i <= end; ++i) {
+            if (arr[i] < pivot) {
+                lessthanpivot++;
+                swap(arr, i, lessthanpivot);
+            }
+        }
+        //all in[sta,lt-1] <pivot
+        swap(arr, sta, lessthanpivot);
+        if (lessthanpivot == k)
+            return lessthanpivot;
+        else if (lessthanpivot < k) {
+            quickpartion(arr, lessthanpivot + 1, end, k);
+        } else {
+            quickpartion(arr, sta, lessthanpivot - 1, k);
+        }
+        return lessthanpivot;
+    }
+
+    public void swap(int[] arr, int i, int j) {
+        int cache = arr[i];
+        arr[i] = arr[j];
+        arr[j] = cache;
+    }
+}

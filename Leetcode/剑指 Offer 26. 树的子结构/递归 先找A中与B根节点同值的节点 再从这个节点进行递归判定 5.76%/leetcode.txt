@@ -1,0 +1,44 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean isSubStructure(TreeNode A, TreeNode B) {
+        if (B == null) {
+            return false;
+        }
+        boolean flag = false;
+        Deque<TreeNode> unvisited = new LinkedList<>();
+        unvisited.addLast(A);
+        while (!unvisited.isEmpty()) {
+            TreeNode cache = unvisited.pollFirst();
+            if (cache.val == B.val)
+                flag |= sameRoot(cache, B);
+            if (cache.left != null)
+                unvisited.addLast(cache.left);
+            if (cache.right != null)
+                unvisited.addLast(cache.right);
+        }
+        return flag;
+    }
+
+    public boolean sameRoot(TreeNode A, TreeNode B) {
+        if (A == null && B == null) {
+            return true;
+        } else if (A != null && B == null) {
+            return true;
+        } else if (A == null && B != null) {
+            return false;
+        } else {
+            if (A.val == B.val) {
+                return sameRoot(A.left, B.left) && sameRoot(A.right, B.right);
+            } else
+                return false;
+        }
+    }
+}

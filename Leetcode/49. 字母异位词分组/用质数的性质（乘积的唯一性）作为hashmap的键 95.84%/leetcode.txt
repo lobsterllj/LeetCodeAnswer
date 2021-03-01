@@ -1,0 +1,29 @@
+class Solution {
+        int[] key = new int[]{2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101};
+
+    public List<List<String>> groupAnagrams(String[] strs) {
+        List<List<String>> res = new ArrayList<>();
+
+        if (strs.length == 0)
+            return res;
+
+        Map<Long, List<String>> res_map = new HashMap<>();
+        for (int i = 0; i < strs.length; ++i) {
+            char[] cache = strs[i].toCharArray();
+            long temp = 1;
+            for (int j = 0; j < cache.length; ++j) {
+                temp *= key[cache[j] - 'a'];
+            }
+
+            List<String> buffer = res_map.getOrDefault(temp, new ArrayList<>());
+            buffer.add(strs[i]);
+            res_map.put(temp, buffer);
+
+        }
+        for (long it : res_map.keySet()) {
+            List<String> cache = new ArrayList<>(res_map.get(it));
+            res.add(cache);
+        }
+        return res;
+    }
+}

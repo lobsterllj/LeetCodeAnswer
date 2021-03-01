@@ -1,0 +1,69 @@
+import java.util.*;
+
+public class main {
+
+    public static void main(String[] args) {
+        main main = new main();
+        prtMatrix prtMatrix=new prtMatrix();
+        int[][] isConnected=new int[][]{
+                {1,1,0},
+                {1,1,0},
+                {0,0,1}
+        };
+        prtMatrix.prtMatrix(isConnected);
+        System.out.println(main.findCircleNum(isConnected));
+    }
+
+    public int findCircleNum(int[][] isConnected) {
+        int numCity = isConnected.length;
+        UnionFind unionFind = new UnionFind(numCity);
+
+        for (int row = 0; row < numCity; ++row) {
+            for (int col = 0; col < numCity; ++col) {
+                if (isConnected[row][col] == 1) {
+                    unionFind.union(row, col);
+                }
+            }
+        }
+
+        Set<Integer> res = new HashSet<>();
+        for (int i = 0; i < numCity; ++i) {
+            res.add(unionFind.find(i));
+        }
+
+        return res.size();
+    }
+
+    private class UnionFind {
+        private int[] fathers;
+
+        public UnionFind(int n) {
+            fathers = new int[n];
+            for (int i = 0; i < n; ++i)
+                fathers[i] = i;
+        }
+
+        public int find(int x) {
+            if (x != fathers[x]) {
+                fathers[x] = find(fathers[x]);
+            }
+            return fathers[x];
+        }
+
+        public void union(int x, int y) {
+            int rootX = find(x);
+            int rootY = find(y);
+            if (rootX == rootY)
+                return;
+            fathers[rootX] = rootY;
+        }
+
+        public boolean isCon(int x, int y) {
+            return find(x) == find(y);
+        }
+
+    }
+
+
+}
+

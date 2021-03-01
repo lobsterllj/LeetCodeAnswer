@@ -1,0 +1,17 @@
+class Solution {
+    public int add(int a, int b) {
+        int non_carry=a^b;
+        int carry=a&b;
+        int cache=non_carry;
+        carry<<=1;
+
+        while(carry!=0)
+        {
+            cache=non_carry;            
+            non_carry=carry^non_carry;
+            carry=carry&cache;
+            carry<<=1;
+        }
+        return non_carry;
+    }
+}

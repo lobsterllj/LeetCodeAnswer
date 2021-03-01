@@ -1,0 +1,19 @@
+class Solution {
+    public void reverseString(char[] s) {
+        Solution aa = new Solution();
+        aa.reverseStrinG(s);
+    }
+    public void reverseStrinG(char[] s) {
+        int s_len = s.length;
+        if (s_len < 2) {
+            return;
+        } else {
+            for (int i = 0; i < s_len / 2; ++i) {
+                int j = s_len - i - 1;
+                s[i] ^= s[j];
+                s[j] ^= s[i];
+                s[i] ^= s[j];
+            }
+        }
+    }
+}

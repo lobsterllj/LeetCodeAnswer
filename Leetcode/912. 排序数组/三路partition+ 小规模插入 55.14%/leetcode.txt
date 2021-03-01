@@ -1,0 +1,66 @@
+class Solution {
+    public int[] sortArray(int[] nums) {
+        quickSort3(nums,0,nums.length-1);
+        return nums;
+    }
+    public void insertionSort(int[] nums, int left, int right) {
+        if ((right - left + 1) < 2)
+            return;
+        for (int i = left + 1; i <= right; ++i) {
+            int uninsert = nums[i];
+            int j = i - 1;
+            while (j >= left && nums[j] > uninsert) {
+                nums[j + 1] = nums[j];
+                j--;
+            }
+            nums[j + 1] = uninsert;
+        }
+    }
+
+    public void quickSort3(int[] nums, int left, int right) {
+        if(right-left+1<=7){
+            insertionSort(nums,left,right);
+            return;
+        }
+        int randomPartitonIndex=new Random().nextInt(right-left+1)+left;
+        swap(nums,left,randomPartitonIndex);
+
+        //all in [left+1,lt] <pivot
+        //all in [lt+1,i-1]  =pivot
+        //all in [gt,right]  >pivot
+        int pivot=nums[left];
+        int lessthanPivotIndex=left;
+        int greaterthanPivotIndex=right+1;
+        int i=left+1;
+
+        while(i<greaterthanPivotIndex){
+            if(nums[i]<pivot){
+                lessthanPivotIndex++;
+                swap(nums,i,lessthanPivotIndex);
+                i++;
+            }
+            else if(nums[i]==pivot){
+                i++;
+            }
+            else {
+                greaterthanPivotIndex--;
+                swap(nums,i,greaterthanPivotIndex);
+            }
+        }
+
+
+        swap(nums,left,lessthanPivotIndex);
+        //all in [left,lt-1]  <pivot
+        //all in [lt,gr-1]    =pivot
+        //all in [gt,right]   >pivot
+        quickSort3(nums,left,lessthanPivotIndex-1);
+        quickSort3(nums,greaterthanPivotIndex,right);
+
+    }
+    public void swap(int[] nums, int i, int j) {
+        int cache = nums[i];
+        nums[i] = nums[j];
+        nums[j] = cache;
+    }
+
+}

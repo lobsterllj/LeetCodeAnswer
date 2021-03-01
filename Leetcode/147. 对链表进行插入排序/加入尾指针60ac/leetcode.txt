@@ -1,0 +1,54 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public ListNode insertionSortList(ListNode head) {
+        if (head == null || head.next == null)
+            return head;
+        ListNode res = new ListNode(-1);
+        ListNode headLast = new ListNode(-1);
+
+        while (head != null) {
+            //外层按照原顺序遍历所有节点
+            CopyandSort(head, res,headLast);
+            head = head.next;
+        }
+        return res.next;
+    }
+
+    public void CopyandSort(ListNode head, ListNode headPre,ListNode headLast) {
+        ListNode copy = headPre.next;//res中的节点
+        ListNode uninserted = new ListNode(head.val);//待插入的节点
+        if (headPre.next == null) {//res中无节点
+            headPre.next = uninserted;
+            headLast.next=uninserted;
+            return;
+        }
+        if (uninserted.val < copy.val) {//比第一个节点小
+            uninserted.next = copy;
+            headPre.next = uninserted;
+            return;
+        }
+        if(uninserted.val>=headLast.next.val){//比最后一个节点大
+            headLast.next.next=uninserted;
+            headLast.next=uninserted;
+            return;
+        }
+        ListNode copyPre= new ListNode(-1);//copy前节点
+        copyPre.next=copy;
+        while (copy != null) {
+            if (uninserted.val<copy.val) {
+                copyPre.next=uninserted;
+                uninserted.next = copy;
+                return;
+            }
+            copyPre=copyPre.next;
+            copy=copy.next;
+        }
+    }
+}

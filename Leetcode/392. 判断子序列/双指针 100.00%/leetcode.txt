@@ -1,0 +1,29 @@
+class Solution {
+    public boolean isSubsequence(String s, String t) {
+        char[] charS = s.toCharArray();
+        char[] charT = t.toCharArray();
+        int lenS = charS.length;
+        int lenT = charT.length;
+        if (lenS == 0)
+            return true;
+        if (lenS > lenT)
+            return false;
+
+        int pS = 0;
+        int pT = 0;
+        while (true){
+            //find charT[pT]== charS[pS]
+            while (pT < lenT && charT[pT] != charS[pS]){
+                pT++;
+            }
+            if (pT == lenT){
+                return false;
+            }
+            pT++;
+            pS++;
+            if (pS == lenS)
+                return true;
+        }
+
+    }
+}

@@ -1,0 +1,30 @@
+import java.util.HashMap;
+import java.util.Map;
+class Solution {
+   public boolean uniqueOccurrences(int[] arr) {
+        if (arr.length == 0) {
+            return true;
+        } else {
+            Map<Integer, Integer> nums_map = new HashMap<>();
+            HashSet<Integer> nums_Set = new HashSet<>();
+            int cache;
+            for (int i = 0; i < arr.length; ++i) {
+                if (nums_map.get(arr[i]) == null) {
+                    nums_map.put(arr[i], 1);
+                } else {
+                    cache = nums_map.get(arr[i]);
+                    nums_map.put(arr[i], cache + 1);
+                }
+            }
+            for (Integer it : nums_map.keySet()) {
+                cache = nums_map.get(it);
+                if (nums_Set.contains(cache)) {
+                    return false;
+                } else {
+                    nums_Set.add(cache);
+                }
+            }
+            return true;
+        }
+    }
+}

@@ -1,0 +1,29 @@
+class Solution {
+    public int maximumProduct(int[] nums) {
+        int first = Integer.MIN_VALUE;
+        int second = Integer.MIN_VALUE;
+        int third = Integer.MIN_VALUE;
+        int last = Integer.MAX_VALUE;
+        int last_but_one = Integer.MAX_VALUE;
+        int len = nums.length;
+        for(int i = 0; i < len; ++i){
+            if(nums[i] < last){
+                last_but_one=last;
+                last=nums[i];
+            }else if(nums[i]<last_but_one){
+                last_but_one=nums[i];                
+            }
+            if(nums[i]>first){
+                third=second;
+                second=first;
+                first=nums[i];
+            }else if(nums[i]>second){
+                third=second;
+                second=nums[i];                
+            }else if(nums[i]>third){
+                third=nums[i];
+            }
+        }
+        return Math.max(first*second*third,last*last_but_one*first);
+    }
+}

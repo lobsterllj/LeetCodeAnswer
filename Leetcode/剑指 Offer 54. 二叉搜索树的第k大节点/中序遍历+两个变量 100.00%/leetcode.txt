@@ -1,0 +1,29 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    int cnts;
+    int res;
+    public int kthLargest(TreeNode root, int k) {
+        cnts=k;
+        midvisit(root);
+        return res;
+    }
+
+    public void midvisit(TreeNode root){
+        if(root==null)
+            return;
+        midvisit(root.right);
+        if(cnts==0)
+            return;
+        if(--cnts==0)
+            res=root.val;
+        midvisit(root.left);
+    }
+}

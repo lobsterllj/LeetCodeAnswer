@@ -1,0 +1,53 @@
+class Solution {
+    public int reversePairs(int[] nums) {
+        if (nums.length <= 1)
+            return 0;
+        int[] numsSorted = new int[nums.length];
+        return mergesort(nums, numsSorted, 0, nums.length-1);
+    }
+
+    public int mergesort(int[] nums, int[] numsSorted, int left, int right) {
+        if (left >= right) {
+            return 0;
+        }
+        int res = 0;
+        int mid = (right + left) >>> 1;
+        res += mergesort(nums, numsSorted, left, mid);
+        res += mergesort(nums, numsSorted, mid + 1, right);
+        res += findreversePairs(nums, left, right);
+
+        int i = left;
+        int j = mid + 1;
+        int m = left;
+        while (i <= mid && j <= right) {
+            if (nums[i] <= nums[j])
+                numsSorted[m++] = nums[i++];
+            else
+                numsSorted[m++] = nums[j++];
+        }
+        while (i <= mid) {
+            numsSorted[m++] = nums[i++];
+        }
+        while (j <= right) {
+            numsSorted[m++] = nums[j++];
+        }
+
+        for (int k = left; k <= right; ++k)
+            nums[k] = numsSorted[k];
+        return res;
+    }
+
+    public int findreversePairs(int[] nums, int left, int right) {
+        int res = 0;
+        int mid = (right + left) >>> 1;
+        int i = left;
+        int j = mid + 1;
+        for (; i <=mid; ++i) {
+            while (j <= right && (long)nums[i] > 2*(long)nums[j]) {
+                res += mid - i + 1;
+                j++;
+            }
+        }
+        return res;
+    }
+}

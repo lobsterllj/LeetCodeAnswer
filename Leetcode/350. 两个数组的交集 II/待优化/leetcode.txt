@@ -1,0 +1,35 @@
+class Solution {
+    public int[] intersect(int[] nums1, int[] nums2) {
+        Map<Integer, Integer> cnts_0 = new HashMap<>();
+        Map<Integer, Integer> cnts = new HashMap<>();
+        int cache;
+        for (int it : nums1) {
+            if (cnts_0.containsKey(it)) {
+                cache = cnts_0.get(it) + 1;
+                cnts_0.put(it, cache);
+            } else {
+                cnts_0.put(it, 1);
+            }
+        }
+        for (int it : nums2) {
+            if (cnts.containsKey(it)) {
+                cache = cnts.get(it) + 1;
+                cnts.put(it, cache);
+            } else {
+                cnts.put(it, 1);
+            }
+        }
+
+        List<Integer> res_list = new ArrayList<>();
+        for (int it : cnts_0.keySet()) {
+            if (cnts.containsKey(it)) {
+                cache=cnts_0.get(it)<cnts.get(it)?cnts_0.get(it):cnts.get(it);
+                for(int i=0;i<cache;++i){
+                    res_list.add(it);
+                }
+            }
+        }
+        int[] res = res_list.stream().mapToInt(Integer::valueOf).toArray();
+        return res;
+    }
+}

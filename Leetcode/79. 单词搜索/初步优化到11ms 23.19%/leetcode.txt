@@ -1,0 +1,40 @@
+class Solution {
+    int Rows;
+    int Cols;
+    int len;
+    public boolean exist(char[][] board, String word) {
+        Rows = board.length;
+        Cols = board[0].length;
+        char[] chars = word.toCharArray();
+        len = chars.length;
+        boolean[][] visited;
+
+        for (int row = 0; row < Rows; ++row){
+            for (int col = 0; col < Cols; ++col){
+                if (board[row][col] == chars[0]){
+                    visited = new boolean[Rows][Cols];
+                    if (backTracking(board, chars, visited, row, col, 0))
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean backTracking(char[][] board, char[] chars, boolean[][] visited, int row, int col, int index){
+        if (index >= len || row < 0 || row >= Rows || col < 0 || col >= Cols || visited[row][col] || board[row][col] != chars[index])
+            return false;
+        if (index == len - 1)
+            return true;
+            
+        boolean res = false;
+        visited[row][col] = true;
+        res = backTracking(board, chars, visited, row + 1, col, index + 1) 
+        || backTracking(board, chars, visited, row, col + 1, index + 1)
+        || backTracking(board, chars, visited, row - 1, col, index + 1)
+        || backTracking(board, chars, visited, row, col - 1, index + 1);
+        visited[row][col] = false;
+        
+        return res;
+    }
+}

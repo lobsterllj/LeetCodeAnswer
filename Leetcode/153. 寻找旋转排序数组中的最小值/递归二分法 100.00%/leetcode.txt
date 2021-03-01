@@ -1,0 +1,22 @@
+class Solution {
+    public int findMin(int[] nums) {
+        return find(nums, 0, nums.length - 1);
+    }
+
+    public int find(int[] nums, int sta, int end) {
+        if (sta == end) {
+            return nums[sta];
+        }
+        if (sta == end - 1) {
+            return Math.min(nums[sta], nums[end]);
+        }
+        int mid = (sta + end) >>> 1;
+        if (nums[mid] > nums[sta] && nums[mid] > nums[end]) {
+            return find(nums, mid + 1, end);
+        } else if (nums[mid] < nums[sta] && nums[mid] < nums[end]) {
+            return find(nums, sta, mid);
+        } else {
+            return find(nums, sta, mid - 1);
+        }
+    }
+}

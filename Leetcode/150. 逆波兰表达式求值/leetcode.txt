@@ -1,0 +1,37 @@
+class Solution {
+    public int evalRPN(String[] tokens) {
+        Deque<Integer> unPocess=new ArrayDeque();
+        int num1=0,num2=0;
+        for(int i=0;i<tokens.length;++i){
+            if(tokens[i].equals("+")){
+                num2=unPocess.pollFirst();
+                num1=unPocess.pollFirst();
+                num1=num1+num2;
+                unPocess.addFirst(num1);
+            }
+            else if(tokens[i].equals("-")){
+                num2=unPocess.pollFirst();
+                num1=unPocess.pollFirst();
+                num1=num1-num2;
+                unPocess.addFirst(num1);
+            }
+            else if(tokens[i].equals("*")){
+                num2=unPocess.pollFirst();
+                num1=unPocess.pollFirst();
+                num1=num1*num2;
+                unPocess.addFirst(num1);
+            }
+            else if(tokens[i].equals("/")){
+                num2=unPocess.pollFirst();
+                num1=unPocess.pollFirst();
+                num1=num1/num2;
+                unPocess.addFirst(num1);
+            }
+            else
+            {
+                unPocess.addFirst(Integer.parseInt(tokens[i]));
+            }
+        }
+        return unPocess.peekFirst();
+    }
+}

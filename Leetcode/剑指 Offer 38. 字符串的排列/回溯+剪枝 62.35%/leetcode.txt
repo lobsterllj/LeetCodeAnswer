@@ -1,0 +1,35 @@
+
+class Solution {
+    int n;
+    char[] chars;
+    List<String> res = new LinkedList<>();
+
+    public String[] permutation(String s) {
+        n = s.length();
+        StringBuilder cache = new StringBuilder();
+        chars = s.toCharArray();
+        boolean[] visited = new boolean[n];
+        Arrays.sort(chars);
+        recur(cache, visited);
+        return res.toArray(new String[]{});
+
+    }
+
+    public void recur(StringBuilder cache, boolean[] visited) {
+        if (cache.length() == n) {
+            res.add(cache.toString());
+        }
+        for (int i = 0; i < n; ++i) {
+            if (visited[i])
+                continue;
+            if (i > 0 && chars[i] == chars[i - 1] && !visited[i - 1]) {
+                continue;
+            }
+            visited[i] = true;
+            cache.append(chars[i]);
+            recur(cache, visited);
+            cache.deleteCharAt(cache.length() - 1);
+            visited[i] = false;
+        }
+    }
+}

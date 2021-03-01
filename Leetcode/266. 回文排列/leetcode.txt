@@ -1,0 +1,15 @@
+class Solution {
+    public boolean canPermutePalindrome(String s) {
+        if (s.length() < 2)
+            return true;
+        Set<Character> cnts = new HashSet();
+        char[] chars = s.toCharArray();
+        for (int i = 0; i < chars.length; ++i) {
+            if (cnts.contains(chars[i]))
+                cnts.remove(chars[i]);
+            else
+                cnts.add(chars[i]);
+        }
+        return cnts.size() < 2;
+    }
+}

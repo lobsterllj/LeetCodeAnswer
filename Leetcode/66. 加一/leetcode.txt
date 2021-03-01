@@ -1,0 +1,41 @@
+class Solution {
+    public int[] plusOne(int[] digits) {
+        int[] m_p=new int[digits.length+1];
+        
+        m_p[0]=0;
+        
+        for(int i=0;i<digits.length;++i)
+        {
+            m_p[i+1]=digits[i];
+        }
+        m_p[digits.length]+=1;
+        
+        
+        for(int i=(digits.length);i>0;--i)
+        {
+            if(m_p[i]>=10)
+            {
+                m_p[i]=0;
+                m_p[i-1]+=1;
+            }
+        }
+        
+        // for(int i=0;i<m_p.length;++i)
+        // {
+        //     System.out.println(m_p[i]);
+        // }
+        
+        if(m_p[0]!=0)
+            return m_p;
+        else
+        {
+            int[] n_p=new int[m_p.length-1];
+            for(int i=0;i<n_p.length;++i)
+            {
+                n_p[i]=m_p[i+1];
+            }
+            
+            return n_p;
+        }
+    }
+}

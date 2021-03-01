@@ -1,0 +1,35 @@
+class Solution {
+    public int searchInsert(int[] nums, int target) {
+        int len = nums.length;
+        if (len == 0)
+            return 0;
+        int left = 0;
+        int right = len - 1;
+        int mid = 0;
+        // 求首索引方式二分法 若不存在target 那么返回一个比target大的元素索引（如果不存在比target大的元素，返回末索引）
+        // while (left < right){
+        //     mid = (left + right) >>> 1;
+        //     if (nums[mid] < target)
+        //         left = mid + 1;
+        //     else
+        //         right = mid;
+        // }
+        // if (nums[left] < target)
+        //     return left + 1;
+        // else
+        //     return left;
+
+        // 求末索引方式二分法 若不存在target 那么返回一个比target小的元素索引（如果不存在比target小的元素，返回首索引）
+        while (left < right){
+            mid = (left + right + 1) >>> 1;
+            if (nums[mid] > target)
+                right = mid - 1;
+            else
+                left = mid;
+        }
+        if (nums[right] < target)
+            return right + 1;
+        else
+            return right;
+    } 
+}

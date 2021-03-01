@@ -1,0 +1,73 @@
+import java.util.HashMap;
+import java.util.Map;
+
+public class main {
+    public static void main(String[] args) {
+        main main = new main();
+        prtMatrix prtMatrix = new prtMatrix();
+        prtInts prtInts = new prtInts();
+
+        int[] A = new int[]{1, 2, 1, 2, 3};
+        int K = 2;
+        System.out.println(main.subarraysWithKDistinct(A, K));
+
+    }
+
+    public int subarraysWithKDistinct(int[] A, int K) {
+        int len = A.length;
+        if (len == 1)
+            return 1;
+        // 子数组内不同元素恰好为K的子数组个数 = 子数组内不同元素个数不大于K的子数组个数 - 子数组内不同元素个数不大于 K - 1 的子数组个数
+        return subarraysWithDistinctlessThanKADD1(A, K) - subarraysWithDistinctlessThanKADD1(A, K - 1);
+    }
+
+    /**
+     * 求子数组内包含不同元素个数不大于K的子数组个数
+     *
+     * @param A 原数组
+     * @param K 目标K值
+     * @return
+     */
+    public int subarraysWithDistinctlessThanKADD1(int[] A, int K) {
+        int len = A.length;
+        if (len == 1)
+            return 1;
+
+        int res = 0;
+        int sta = 0;
+        int end = 0;
+        Map<Integer, Integer> cnts = new HashMap<>();
+
+        // Eg: [1a,2a,1b,2b,3], K = 2
+        // [1a] : 不同 = 1 增加了[1a] res += 1
+        // [1a,2a] : 不同 = 2 可以认为增加了[2a],[1a,2a] res += 2
+        // [1a,2a,1b,2b] : 不同 = 2 增加了[2b],[1b,2b],[2a,1b,2b],[1a,2a,1b,2b]
+        // [2b,3] : 不同 = 2 增加了 [3],[2b,3]
+
+        while (end < len) {
+            int endnum = A[end];
+            int endcnt = cnts.getOrDefault(endnum, 0) + 1;
+            cnts.put(endnum, endcnt);
+
+            while (sta < end && cnts.size() > K) {
+                int stanum = A[sta];
+                int stacnt = cnts.get(stanum) - 1;
+                if (stacnt == 0)
+                    cnts.remove(stanum);
+                else
+                    cnts.put(stanum, stacnt);
+                sta++;
+            }
+
+            if (cnts.size() <= K) {
+                System.out.println("K:" + K + " sta:" + sta + " end:" + end + " res_add:" + (end - sta + 1));
+                res += end - sta + 1;
+            }
+            end++;
+        }
+
+        return res;
+    }
+
+
+}

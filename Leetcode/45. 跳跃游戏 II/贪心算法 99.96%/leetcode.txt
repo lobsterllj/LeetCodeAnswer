@@ -1,0 +1,30 @@
+class Solution {
+    public int jump(int[] nums) {
+        int len = nums.length;
+        if (len == 1)
+            return 0;
+
+        int index = 0;
+        int cnt = 0;
+        int step = 0;
+        int nextIndex = 0;
+        int maxReach = 0;
+        while (index < len){
+            step = nums[index];
+            cnt++;
+            while (step > 0){
+                index++;
+                if (index >= len - 1)
+                    return cnt;
+                if (index + nums[index] > maxReach){
+                    nextIndex = index;
+                    maxReach = index + nums[index];
+                }
+                step--;
+            }
+            index = nextIndex;
+        }
+
+        return cnt;
+    }
+}

@@ -1,0 +1,16 @@
+class Solution {
+    public int findNthDigit(int n) {
+        int digit = 1;//位数
+        long start = 1;//该位数最小的数字
+        long count = 9;//该位数所有数字的个数
+        while (n > count) {
+            n -= count;
+            digit += 1;
+            start = 10 * start;
+            count = 9 * start * digit;
+        }
+        long num = start + (n - 1) / digit;
+        int res = Long.toString(num).charAt((n - 1) % digit)-'0';
+        return res;
+    }
+}

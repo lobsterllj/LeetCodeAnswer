@@ -1,0 +1,49 @@
+class Solution {
+    public int[] searchRange(int[] nums, int target) {
+        if (nums.length == 0)
+            return new int[]{-1, -1};
+        int firstIndex=findFirstIndex(nums,target);
+        if(firstIndex==-1)
+            return new int[]{-1, -1};
+        int lastIndex=findLastIndex(nums,target);
+        return new int[]{firstIndex,lastIndex};
+
+    }
+
+    public int findFirstIndex(int[] nums, int target) {
+        int begin = 0;
+        int end = nums.length - 1;
+        int comp;
+        while (begin != end) {
+            comp = (begin + end) >> 1;
+            if (nums[comp] < target)
+                begin = comp + 1;
+                //搜索区间-> [comp+1,end]
+            else
+                end = comp;
+                //搜索区间-> [begin,comp]
+        }
+        if (nums[begin] != target)
+            return -1;
+        return begin;
+    }
+
+    public int findLastIndex(int[] nums, int target) {
+        int begin = 0;
+        int end = nums.length - 1;
+        int comp = 0;
+
+        while (begin != end) {
+            comp = (begin + end + 1) >> 1;
+            if (nums[comp] > target)
+                end = comp - 1;
+                //搜索区间-> [begin,comp-1]
+            else
+                begin = comp;
+                //搜索区间-> [comp,end]
+        }
+        if (nums[begin] != target)
+            return -1;
+        return begin;
+    }
+}

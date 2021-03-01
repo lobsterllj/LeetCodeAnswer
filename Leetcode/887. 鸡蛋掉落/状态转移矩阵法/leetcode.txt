@@ -1,0 +1,22 @@
+class Solution {
+    public int superEggDrop(int K, int N) {
+        Solution aa=new Solution();
+        return aa.superEggDro(K,N);
+
+    }
+    public int superEggDro(int K, int N) {
+        int res=0;
+        int[] dp=new int[K+1];
+
+        while(dp[K]<N)
+        {
+            for(int i=K;i>0;--i)
+            {
+                dp[i]=dp[i]+dp[i-1]+1;
+                
+            }
+            res++;
+        }
+        return res;
+    }
+}

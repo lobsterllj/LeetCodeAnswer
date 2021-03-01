@@ -1,0 +1,35 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public TreeNode convertBiNode(TreeNode root) {
+        if(root == null)
+            return null;
+        TreeNode dummy = root;
+        while (dummy.left != null) {
+            dummy = dummy.left;
+        }
+        recur(root);
+        return dummy;
+    }
+
+    TreeNode last;
+
+    public void recur(TreeNode root) {
+        if (root == null)
+            return;
+        recur(root.left);
+        if (last != null)
+            last.right = root;
+        root.left = null;
+        last = root;
+        recur(root.right);
+    }
+
+}

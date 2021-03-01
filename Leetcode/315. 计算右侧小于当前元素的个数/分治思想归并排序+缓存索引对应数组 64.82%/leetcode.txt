@@ -1,0 +1,69 @@
+class Solution {
+    private int[] cntofIndex;
+    private int[] index;
+    private int[] temp;
+    private int[] tempIndex;
+
+
+    public List<Integer> countSmaller(int[] nums) {
+        List<Integer> res = new LinkedList<>();
+        if (nums.length == 0)
+            return res;
+        cntofIndex = new int[nums.length];
+        index = new int[nums.length];
+        temp = new int[nums.length];
+        tempIndex = new int[nums.length];
+        //index = 现有索引   val = 在原数组中的索引
+        for (int i = 0; i < nums.length; ++i) {
+            index[i] = i;
+        }
+
+        mergesortandcnt(nums, 0, nums.length - 1);
+        for (int it : cntofIndex)
+            res.add(it);
+        return res;
+    }
+
+    public void mergesortandcnt(int[] nums, int left, int right) {
+        if (left >= right) {
+            return;
+        }
+
+        int mid = (right + left) >>> 1;
+        mergesortandcnt(nums, left, mid);
+        mergesortandcnt(nums, mid + 1, right);
+
+
+        int i = left;
+        int j = mid + 1;
+        int m = left;
+
+        while (i <= mid && j <= right) {
+            if (nums[i] <= nums[j]) {
+                tempIndex[m] = index[i];
+                cntofIndex[index[i]] += (j - mid - 1);
+                temp[m++] = nums[i++];
+            } else {
+                tempIndex[m] = index[j];
+                temp[m++] = nums[j++];
+            }
+        }
+        while (i <= mid) {
+            tempIndex[m] = index[i];
+            cntofIndex[index[i]] += (j - mid - 1);
+            temp[m++] = nums[i++];
+        }
+        while (j <= right) {
+            tempIndex[m] = index[j];
+            temp[m++] = nums[j++];
+        }
+
+        for (int x = left; x <= right; ++x) {
+            nums[x] = temp[x];
+            index[x] = tempIndex[x];
+        }
+
+        return;
+    }
+
+}

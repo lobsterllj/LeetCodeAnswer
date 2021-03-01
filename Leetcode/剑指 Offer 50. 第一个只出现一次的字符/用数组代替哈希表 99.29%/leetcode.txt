@@ -1,0 +1,9 @@
+class Solution {
+    public char firstUniqChar(String s) {
+        int[] table = new int[26];
+        char[] myarray = s.toCharArray();
+        for(char c : myarray) ++table[c - 'a'];
+        for(char c : myarray) if(table[c - 'a'] == 1) return c;
+        return ' ';
+    }
+}

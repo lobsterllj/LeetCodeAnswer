@@ -1,0 +1,23 @@
+class Solution {
+    public int minKBitFlips(int[] A, int K) {
+        int res = 0;
+        int len = A.length;
+        Deque<Integer> que = new LinkedList<>();
+        // que 内元素的代表翻转的起始位置 所以元素的个数代表了翻转的总次数
+        for (int i = 0; i < len; i++) {
+            if (que.size() > 0 && i > que.peekFirst() + K - 1) {
+                que.removeFirst();
+            }
+            //1.A[i]本来是1，翻转奇数次，变成0，所以需要再次翻转，放入队列
+            //2.A[i]本来是0，翻转偶数次，变成1，所以需要再次翻转，放入队列
+            if (que.size() % 2 == A[i]) {
+                if (i + K > len) return -1;
+                que.addLast(i);
+                res += 1;
+            }
+        }
+        return res;
+    }
+
+
+}

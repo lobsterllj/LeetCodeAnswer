@@ -1,0 +1,53 @@
+class Solution {
+public String reorganizeString(String S) {
+        if (S.length() == 0)
+            return S;
+        int[] cnts = new int[26];
+        int N = S.length();
+        for (int i = 0; i < N; ++i) {
+            int index = S.charAt(i) - 'a';
+            cnts[index]++;
+            if (cnts[index] > ((N >> 1) + 1))
+                return "";
+        }
+        PriorityQueue<Character> maxheap = new PriorityQueue<>((a, b) -> cnts[b - 'a'] - cnts[a - 'a']);
+        for (int i = 0; i < 26; ++i) {
+            if (cnts[i] != 0) {
+                char cache = (char) (i + 'a');
+                maxheap.add(cache);
+            }
+        }
+
+        StringBuilder res = new StringBuilder();
+        char lastChar = 'A';
+        while (!maxheap.isEmpty()) {
+            char temp = maxheap.peek();
+            if (temp != lastChar) {
+                maxheap.poll();
+                cnts[temp - 'a']--;
+                lastChar = temp;
+                res.append(temp);
+                if (cnts[temp - 'a'] != 0) {
+                    maxheap.add(temp);
+                }
+            }
+            else {
+                //temp==lastChar
+                maxheap.poll();
+                if(maxheap.isEmpty()){
+                    return "";
+                }
+                char secondLarge=maxheap.poll();
+                cnts[secondLarge - 'a']--;
+                lastChar = secondLarge;
+                res.append(secondLarge);
+                if (cnts[secondLarge - 'a'] != 0) {
+                    maxheap.add(secondLarge);
+                }
+                maxheap.add(temp);
+            }
+        }
+        return res.toString();
+    }
+
+}

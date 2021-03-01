@@ -1,0 +1,34 @@
+class Solution {
+    public boolean lemonadeChange(int[] bills) {
+        int cash_5=0;
+        int cash_10=0;
+        for(int i=0;i<bills.length;++i){
+            if(bills[i]==5){
+                cash_5++;
+            }
+            else if(bills[i]==10){
+                if(cash_5==0)
+                    return false;
+                cash_5--;
+                cash_10++;
+            }
+            else{
+                if(cash_5<1)
+                    return false;
+                if(cash_10==1&&cash_5<1)
+                    return false;
+                if(cash_10==0&&cash_5<3)
+                    return false;
+                if(cash_10==0){
+                    cash_5-=3;
+                }
+                else{
+                    cash_10-=1;
+                    cash_5-=1;
+                }
+            }
+        }
+
+        return true;
+    }
+}

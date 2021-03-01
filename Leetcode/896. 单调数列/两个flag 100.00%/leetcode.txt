@@ -1,0 +1,30 @@
+class Solution {
+    public boolean isMonotonic(int[] A) {
+        int len = A.length;
+        if (len < 2)
+            return true;
+        
+        boolean flagUpdate = false;
+        boolean isINC = false;
+        for (int i = 1; i < len; ++i){
+            if (!flagUpdate){
+                if (A[i] > A[i - 1]){
+                    flagUpdate = true;
+                    isINC = true;
+                }else if (A[i] < A[i - 1]){
+                    flagUpdate = true;
+                    isINC = false;
+                }
+            }else{
+                if (isINC){
+                    if (A[i] < A[i - 1])
+                        return false;
+                }else{
+                    if (A[i] > A[i - 1])
+                        return false;
+                }
+            }
+        }
+        return true;
+    }
+}

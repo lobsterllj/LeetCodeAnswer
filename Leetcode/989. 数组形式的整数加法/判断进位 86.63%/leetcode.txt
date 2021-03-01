@@ -1,0 +1,58 @@
+class Solution {
+    public List<Integer> addToArrayForm(int[] A, int K) {
+        List<Integer> res=new ArrayList<>();
+        int lenA = A.length;
+        if(K==0){
+            for(int i=0;i<lenA;++i){
+                res.add(A[i]);
+            }
+            return res;
+        }
+        List<Integer> res_rev=new ArrayList<>();
+        List<Integer> B=new ArrayList<>();
+        while(K>0){
+            B.add(K % 10);
+            K /= 10;
+        }
+
+        int lenB = B.size();
+        int carry = 0;
+        int indexB =0;
+        for(int i=lenA-1;i>-1;--i){
+            indexB = lenA-1-i;
+            int cache = 0;
+            if(indexB < lenB){
+                cache=A[i] + B.get(indexB) + carry;
+            }else{
+                cache=A[i] + carry;
+            }
+            if(cache > 9){
+                cache -= 10;  
+                carry = 1;
+            }else{
+                carry = 0;
+            }
+            res_rev.add(cache);
+        }
+
+        while(indexB < lenB - 1){
+            int cache = B.get(++indexB) + carry;
+            if(cache > 9){
+                cache -= 10;  
+                carry = 1;
+            }else{
+                carry = 0;
+            }
+            res_rev.add(cache);
+        }
+        
+        if(carry == 1)
+            res_rev.add(1);
+
+        int len_res = res_rev.size();
+        for(int i = len_res-1; i > -1; --i){
+            res.add(res_rev.get(i));
+        }
+        return res;
+    }
+}

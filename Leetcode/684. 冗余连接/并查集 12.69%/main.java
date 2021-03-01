@@ -1,0 +1,88 @@
+import java.util.*;
+
+public class main {
+    public static void main(String[] args) {
+        main main = new main();
+        prtMatrix prtMatrix = new prtMatrix();
+        prtints prtints = new prtints();
+        int[][] edges = new int[][]{
+                {1, 4},
+                {3, 4},
+                {1, 3},
+                {1, 2},
+                {4, 5}
+        };
+        prtints.prt(main.findRedundantConnection(edges));
+    }
+
+    static class UnionFind {
+        int[] fathers;
+
+        public UnionFind(int size) {
+            fathers = new int[size];
+            for (int i = 0; i < size; ++i) {
+                fathers[i] = i;
+            }
+        }
+
+        public int find(int x) {
+            if (x != fathers[x])
+                fathers[x] = find(fathers[x]);
+            return fathers[x];
+        }
+
+        public void union(int x, int y) {
+            int rootX = find(x);
+            int rootY = find(y);
+            if (rootX == rootY)
+                return;
+            fathers[rootX] = rootY;
+        }
+
+        public Map setMap() {
+            Map<Integer, List<Integer>> map = new HashMap<>();
+            for (int i = 0; i < fathers.length; ++i) {
+                List<Integer> cache = map.getOrDefault(find(i), new ArrayList<>());
+                cache.add(i);
+                map.put(find(i), cache);
+            }
+            return map;
+        }
+
+        public boolean groups() {
+            int root = find(0);
+            for (int i = 1; i < fathers.length; ++i) {
+                if (find(i) != root) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
+    public int[] findRedundantConnection(int[][] edges) {
+        int N = 3;
+        for (int[] it : edges) {
+            N = Math.max(N, it[0]);
+            N = Math.max(N, it[1]);
+        }
+        for (int i = edges.length - 1; i > -1; --i) {
+            UnionFind unionFind = new UnionFind(N);
+            for (int j = 0; j < edges.length; ++j) {
+                if (i != j) {
+                    unionFind.union(edges[j][0] - 1, edges[j][1] - 1);
+                }
+            }
+            if(unionFind.groups()){
+                return edges[i];
+            }
+//            Map map=unionFind.setMap();
+//            if(map.size()==1)
+//                return edges[i];
+//            System.out.println(map);
+        }
+        return new int[]{};
+    }
+
+}
+

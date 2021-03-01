@@ -1,0 +1,107 @@
+class Solution {
+    public double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
+        int equationsSize = equations.size();
+        UnionFind unionFind = new UnionFind(2 * equationsSize);
+        Map<String, Integer> map = new HashMap<>(2 * equationsSize);
+
+        int id = 0;
+        for (int i = 0; i < equationsSize; ++i) {
+            List<String> cache = equations.get(i);
+            String string1 = cache.get(0);
+            String string2 = cache.get(1);
+            if (!map.containsKey(string1))
+                map.put(string1, id++);
+            if (!map.containsKey(string2))
+                map.put(string2, id++);
+            unionFind.union(map.get(string1), map.get(string2), values[i]);
+        }
+
+        int queriesSize = queries.size();
+        double[] res = new double[queriesSize];
+        for (int i = 0; i < queriesSize; ++i) {
+            List<String> cache = queries.get(i);
+            String string1 = cache.get(0);
+            String string2 = cache.get(1);
+            if (map.containsKey(string1) && map.containsKey(string2)) {
+                res[i] = unionFind.isConnected(map.get(string1), map.get(string2));
+            } else {
+                res[i] = -1.0d;
+            }
+        }
+        return res;
+    }
+
+    private class UnionFind {
+        /**
+         * 父节点
+         */
+        private int[] parents;
+
+        /**
+         * 指向父节点的权重
+         */
+        private double[] weight;
+
+        /**
+         * 实例化并查集
+         *
+         * @param n 并查集的最大可能长度
+         */
+        public UnionFind(int n) {
+            this.parents = new int[n];
+            this.weight = new double[n];
+            for (int i = 0; i < n; ++i) {
+                parents[i] = i;
+                weight[i] = 1.0d;
+            }
+        }
+
+        /**
+         * 查找根节点，并压缩途径路径
+         *
+         * @param x 被查找的节点
+         * @return x 对应的根节点
+         */
+        public int find(int x) {
+            if (x != parents[x]) {
+                int origin = parents[x];
+                parents[x] = find(parents[x]);
+                weight[x] *= weight[origin];
+            }
+            return parents[x];
+        }
+
+        /**
+         * 连接两个集合
+         *
+         * @param x     除数
+         * @param y     被除数
+         * @param value 商
+         */
+        public void union(int x, int y, double value) {
+            int rootX = find(x);
+            int rootY = find(y);
+            if (rootX == rootY)
+                return;
+            parents[rootX] = rootY;
+            weight[rootX] = (value * weight[y]) / weight[x];
+        }
+
+        /**
+         * 判断两个节点是否属于一个集合
+         * 如果属于一个集合，返回两个节点与父节点的权重的比值
+         *
+         * @param x 节点1
+         * @param y 节点2
+         * @return
+         */
+        public double isConnected(int x, int y) {
+            int rootX = find(x);
+            int rootY = find(y);
+            if (rootX == rootY)
+                return weight[x] / weight[y];
+            else
+                return -1.0d;
+        }
+    }
+}

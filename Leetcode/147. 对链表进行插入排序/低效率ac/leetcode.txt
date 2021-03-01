@@ -1,0 +1,53 @@
+
+  Definition for singly-linked list.
+  public class ListNode {
+      int val;
+      ListNode next;
+      ListNode(int x) { val = x; }
+  }
+ 
+class Solution {
+    public ListNode insertionSortList(ListNode head) {
+        if (head == null  head.next == null)
+            return head;
+        ListNode dummy = new ListNode(-1);
+        dummy.next = head;
+        ListNode res = new ListNode(-1);
+
+        while (head != null) {
+            外层按照原顺序遍历所有节点
+            CopyandSort(head, res);
+            head = head.next;
+        }
+        return res.next;
+    }
+
+    public void CopyandSort(ListNode head, ListNode headPre) {
+        ListNode copy = headPre.next;res中的节点
+        ListNode uninserted = new ListNode(head.val);待插入的节点
+        if (headPre.next == null) {res中无节点
+            headPre.next = uninserted;
+            return;
+        }
+        if (uninserted.val  copy.val) {
+            uninserted.next = copy;
+            headPre.next = uninserted;
+            return;
+        }
+        ListNode copyPre= new ListNode(-1);copy前节点
+        copyPre.next=copy;
+        while (copy != null) {
+            if (uninserted.valcopy.val) {
+                copyPre.next=uninserted;
+                uninserted.next = copy;
+                return;
+            }
+            copyPre=copyPre.next;
+            if(copy.next==null){
+                copy.next=uninserted;
+                return;
+            }
+            copy=copy.next;
+        }
+    }
+}

@@ -1,0 +1,23 @@
+class Solution {
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        for (int i = 0; i < gas.length; ++i) {
+            //遍历每一个起点
+            if (gas[i] >= cost[i]) {
+                int fund = gas[i] - cost[i];
+                int k = i;
+                while (fund >= 0) {
+                    if (k == gas.length-1) {
+                        k = 0;
+                    } else {
+                        k++;
+                    }
+                    fund += gas[k] - cost[k];
+                    if (k == i) {
+                        return k;
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+}

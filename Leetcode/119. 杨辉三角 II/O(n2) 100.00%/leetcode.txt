@@ -1,0 +1,20 @@
+class Solution {
+    public List<Integer> getRow(int rowIndex) {
+        int[][] dp = new int[rowIndex + 1][];
+        dp[0] = new int[]{1};
+
+        for (int row = 1; row < rowIndex + 1; ++row){
+            dp[row] = new int[row + 1];
+            dp[row][0] = 1;
+            dp[row][row] = 1;
+            for (int col = 1; col < row; ++ col){
+                dp[row][col] = dp[row - 1][col - 1] + dp[row - 1][col];
+            }
+        }
+        List<Integer> res = new LinkedList<>();
+        for (int it : dp[rowIndex]){
+            res.add(it);
+        }
+        return res;
+    }
+}

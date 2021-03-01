@@ -1,0 +1,35 @@
+class Solution {
+    public String frequencySort(String s) {
+        char[] chars = s.toCharArray();
+        int len = chars.length;
+        if (len < 2)
+            return s;
+
+        Map<Character, Integer> cnts = new HashMap<>();
+        for (char it : chars){
+            int cnt = cnts.getOrDefault(it, 0) + 1;
+            cnts.put(it, cnt);
+        }
+
+        List<Character>[] lists = new List[len + 1];
+
+        for (char key : cnts.keySet()){
+            int freq = cnts.get(key);
+            if (lists[freq] == null)
+                lists[freq] = new ArrayList<>();
+            lists[freq].add(key);
+        }
+
+        StringBuilder res = new StringBuilder();
+        for (int i = len; i > 0; --i){
+            if (lists[i] != null){
+                for (char c : lists[i]){
+                    for(int time = i; time > 0; --time)
+                        res.append(c);
+                }
+            }
+        }
+
+        return res.toString();
+    }
+}

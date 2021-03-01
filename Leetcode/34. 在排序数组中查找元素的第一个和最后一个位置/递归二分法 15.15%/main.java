@@ -1,0 +1,56 @@
+import java.util.*;
+
+public class main {
+
+    public static void main(String[] args) {
+        main main = new main();
+        int[] ints = new int[]{1};
+        int target = 1;
+        int[] res = main.searchRange(ints, target);
+        System.out.println(res[0]);
+        System.out.println(res[1]);
+    }
+
+
+    public int[] searchRange(int[] nums, int target) {
+        if (nums.length == 0)
+            return new int[]{-1, -1};
+        int begin = 0;
+        int end = nums.length - 1;
+        Set<Integer> index = new HashSet<>();
+        indexOftar(nums, begin, end, target, index);
+
+        if (index.size() == 0)
+            return new int[]{-1, -1};
+        System.out.println("index:"+index);
+        int large = Integer.MIN_VALUE;
+        int small = Integer.MAX_VALUE;
+        for (int it : index) {
+            if (it > large)
+                large = it;
+            if (it < small)
+                small = it;
+        }
+        return new int[]{small, large};
+    }
+
+    public void indexOftar(int[] nums, int begin, int end, int target, Set<Integer> index) {
+        if (begin > end || nums[begin] > target || nums[end] < target)
+            return;
+        int comp;
+        int copybegin = begin;
+        int copyend = end;
+        while (begin != end) {
+            comp = (begin + end) >> 1;
+            if (nums[comp] < target)
+                begin = comp + 1;
+            else
+                end = comp;
+        }
+        if (nums[begin] != target)
+            return;
+        index.add(begin);
+        indexOftar(nums, copybegin, begin - 1, target, index);
+        indexOftar(nums, begin + 1, copyend, target, index);
+    }
+}

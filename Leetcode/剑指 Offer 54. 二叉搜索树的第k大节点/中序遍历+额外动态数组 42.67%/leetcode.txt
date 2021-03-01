@@ -1,0 +1,24 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public int kthLargest(TreeNode root, int k) {
+        List<TreeNode> sortedTree=new ArrayList<>();
+        midvisit(root,sortedTree);
+        return sortedTree.get(sortedTree.size()-k).val;
+
+    }
+    public void midvisit(TreeNode root,List<TreeNode> sortedTree){
+        if(root==null)
+            return;
+        midvisit(root.left,sortedTree);
+        sortedTree.add(root);
+        midvisit(root.right,sortedTree);
+    }
+}

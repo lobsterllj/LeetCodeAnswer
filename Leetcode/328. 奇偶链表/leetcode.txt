@@ -1,0 +1,43 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode oddEvenList(ListNode head) {
+        if (head == null || head.next == null || head.next.next == null)
+            return head;
+        ListNode odd_head = new ListNode();
+        ListNode odd = head;
+        odd_head.next = odd;
+        //System.out.println("odd_head.next.val:" + odd_head.next.val);
+        ListNode even_head = new ListNode();
+        ListNode even = head.next;
+        even_head.next = even;
+        //System.out.println("even_head.next.val:" + even_head.next.val);
+
+        while (even.next != null) {
+            //System.out.println("odd.val:" + odd.val);
+            odd.next = odd.next.next;
+            odd = odd.next;
+            //System.out.println("odd.val:" + odd.val);
+
+            if (even.next.next == null) {
+                even.next = null;
+                break;
+            }
+            //System.out.println("even.val:" + even.val);
+            even.next = even.next.next;
+            even = even.next;
+            //System.out.println("even.val:" + even.val);
+        }
+        odd.next = even_head.next;
+
+        return odd_head.next;
+    }
+}

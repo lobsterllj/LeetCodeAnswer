@@ -1,0 +1,24 @@
+class Solution {
+    public boolean verifyPostorder(int[] postorder) {
+       return helper (postorder, 0 ,postorder.length -1);
+    }
+
+    private boolean helper(int[] postorder, int start, int end) {
+        if (start >= end) {
+            return true;
+        }
+        int middle = start;
+        for (int i = start; i < end ; i++) {
+            if (postorder[i] < postorder[end]) {
+                middle ++;
+            }
+        }
+        for (int i = middle; i < end; i++) {
+            if (postorder[i] < postorder[end]) {
+                return false;
+            }
+        }
+        return helper(postorder,start, middle-1) && helper(postorder,middle, end-1);
+
+    }
+}

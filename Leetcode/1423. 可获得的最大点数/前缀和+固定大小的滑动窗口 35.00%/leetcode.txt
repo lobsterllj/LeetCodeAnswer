@@ -1,0 +1,30 @@
+class Solution {
+    public int maxScore(int[] cardPoints, int k) {
+        int len = cardPoints.length;
+        int lenD = len - k;
+        int[] preSum = new int[len];
+        preSum[0] = cardPoints[0];
+        for (int i = 1; i < len; ++i){
+            preSum[i] = preSum[i - 1] + cardPoints[i];
+        }
+        int sum = preSum[len - 1];
+        if (lenD == 0)
+            return sum;
+        int res = 0;
+        for (int i = 0; i < len - lenD + 1; ++i){
+            int cache = getSum(preSum, i, i + lenD -1);
+            res = Math.max(res,sum - cache);
+        }
+        return res;
+        
+    }
+    public int getSum(int[] preSum, int first, int last){
+        if (first == 0)
+            return preSum[last];
+        else
+            return preSum[last] - preSum[first - 1];
+    }
+
+
+
+}

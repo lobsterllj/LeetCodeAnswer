@@ -1,0 +1,42 @@
+class Solution {
+    public int wiggleMaxLength(int[] nums) {
+        if (nums.length < 2)
+            return nums.length;
+        if (nums.length == 2 && nums[0] == nums[1])
+            return 1;
+        int res = 1;
+        boolean increase = false;
+        boolean firstChange = false;
+        for (int i = 1; i < nums.length; ++i) {
+            if (nums[i] == nums[i - 1]) {
+                continue;
+            } else if (nums[i] > nums[i - 1]) {
+                if (!firstChange) {
+                    //第一次上升或者下降
+                    res++;
+                } else {
+                    if (!increase) {
+                        //由升转降
+                        res++;
+                    }
+                }
+                //处于上升
+                increase = true;
+            } else {
+                if (!firstChange) {
+                    //第一次上升或者下降
+                    res++;
+                } else {
+                    if (increase) {
+                        //由降转升
+                        res++;
+                    }
+                }
+                //处于下降
+                increase = false;
+            }
+            firstChange = true;
+        }
+        return res;
+    }
+}

@@ -1,0 +1,13 @@
+class Solution {
+    public int arrayPairSum(int[] nums) {
+        int len = nums.length;
+        int n = len >>> 1;
+        Arrays.sort(nums);
+        int res = 0;
+        for (int i = 0; i < n; ++i){
+            // int cache = Math.min(nums[2 * i], nums[2 * i + 1]);
+            res += nums[2 * i];
+        }
+        return res;
+    }
+}

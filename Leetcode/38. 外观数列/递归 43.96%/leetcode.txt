@@ -1,0 +1,45 @@
+class Solution {
+    public String countAndSay(int n) {
+        if (n == 1)
+            return "1";
+        // if (n == 2)
+        //     return "11";
+        // if (n == 3)
+        //     return "21";
+        // if (n == 4)
+        //     return "1211";
+        char[] chars = countAndSay(n - 1).toCharArray();
+        List<Character> res = new ArrayList<>();
+
+        for (int i = 0; i < chars.length; ++i){
+            if (res.size() == 0 || res.get(res.size() - 1) != chars[i]){
+                res.add(chars[i]);
+            }
+        }
+
+        List<Integer> cnt = new ArrayList<>();
+        int cache = 0;
+        int index_res = 0;
+        for(int j = 0; j < chars.length; ++j){
+            if(chars[j] == res.get(index_res)){
+                cache++;
+            }else{
+                cnt.add(cache);
+                index_res++;
+                cache = 1;
+            }
+        }
+       
+        cnt.add(cache);
+        // System.out.println(n + ":" + res);
+        // System.out.println(n + ":" + cnt);
+
+        StringBuilder str = new StringBuilder();
+        for (int i = 0; i < res.size(); ++i){
+            str.append(cnt.get(i));
+            str.append(res.get(i));
+        }
+        return str.toString();
+    }
+
+}

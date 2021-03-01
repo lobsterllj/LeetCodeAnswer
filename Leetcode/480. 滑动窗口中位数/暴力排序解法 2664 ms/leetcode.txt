@@ -1,0 +1,18 @@
+class Solution {
+    public double[] medianSlidingWindow(int[] nums, int k) {
+        int len = nums.length;
+        double[] res = new double[len - k + 1];
+        for (int i = 0; i < res.length; ++i) {
+            res[i] = getMedium(nums, i, i + k - 1);
+        }
+        return res;
+    }
+
+    public double getMedium(int[] nums, int sta, int end) {
+        int len = end - sta + 1;
+        int[] copy = new int[len];
+        System.arraycopy(nums, sta, copy, 0, len);
+        Arrays.sort(copy);
+        return ((double) ((long)copy[(len - 1) / 2] + (long)copy[len / 2]) * 0.5);
+    }
+}

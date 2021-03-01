@@ -1,0 +1,13 @@
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        if(nums.length==1)
+            return new int[]{};
+        Set<Integer> visited=new HashSet<>();
+        for(int it:nums){
+            if(visited.contains(target-it))
+                return new int[]{it,target-it};
+            visited.add(it);
+        }
+        return new int[]{};
+    }
+}

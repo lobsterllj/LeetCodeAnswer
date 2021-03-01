@@ -1,0 +1,32 @@
+class Solution {
+    public List<List<Integer>> largeGroupPositions(String s) {
+        int len=s.length();
+        List<List<Integer>> res=new ArrayList<>();
+        if(len<3)
+            return res;
+        char[] chars=s.toCharArray();
+        int[] cnts=new int[len];
+        for(int i=1;i<len;++i){
+            if(chars[i]==chars[i-1]){
+                cnts[i]=cnts[i-1]+1;
+            }
+        }
+        int index=len-1;
+        while(index>-1){
+            if(cnts[index]<2)
+                index--;
+            else{
+                List<Integer> cache=new ArrayList<>();
+                cache.add(index-cnts[index]);
+                cache.add(index);
+                res.add(cache);
+                index=index-cnts[index]-1;
+            }
+        }
+        List<List<Integer>> res_reverse=new ArrayList<>();
+        for(int i=res.size()-1;i>-1;--i){
+            res_reverse.add(res.get(i));
+        }
+        return res_reverse;
+    }
+}

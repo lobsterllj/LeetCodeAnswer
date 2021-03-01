@@ -1,0 +1,64 @@
+class Solution {
+    public double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
+        int count = 0;
+        //统计出现的所有字符，并赋予对应的index
+        Map<String, Integer> map = new HashMap<>();
+        for (List<String> list : equations) {
+            for (String s : list) {
+                if (!map.containsKey(s)) {
+                    map.put(s, count++);
+                }
+            }
+        }
+
+        //构建一个矩阵来代替图结构
+        double[][] graph = new double[count + 1][count + 1];
+
+        //初始化
+        for (String s : map.keySet()) {
+            int x = map.get(s);
+            graph[x][x] = 1.0;
+        }
+        int index = 0;
+        for (List<String> list : equations) {
+            String a = list.get(0);
+            String b = list.get(1);
+            int aa = map.get(a);
+            int bb = map.get(b);
+            double value = values[index++];
+            graph[aa][bb] = value;
+            graph[bb][aa] = 1 / value;
+        }
+
+        //Floyd法  o(n3)
+        for (int transit = 0; transit < count; ++transit) {
+            for (int i = 0; i < count; ++i) {
+                for (int j = 0; j < count; ++j) {
+                    if (i == j || graph[i][j] != 0)
+                        continue;
+                    if (graph[i][transit] != 0 && graph[transit][j] != 0) {
+                        graph[i][j] = graph[i][transit] * graph[transit][j];
+                    }
+
+                }
+            }
+        }
+
+        //直接查询矩阵得到答案
+        double[] res = new double[queries.size()];
+        for (int i = 0; i < res.length; ++i) {
+            String p1 = queries.get(i).get(0);
+            String p2 = queries.get(i).get(1);
+            if (map.containsKey(p1) && map.containsKey(p2)) {
+                if (graph[map.get(p1)][map.get(p2)] != 0)
+                    res[i] = graph[map.get(p1)][map.get(p2)];
+                else
+                    res[i] = -1d;
+            } else {
+                res[i] = -1d;
+            }
+        }
+
+        return res;
+    }
+}

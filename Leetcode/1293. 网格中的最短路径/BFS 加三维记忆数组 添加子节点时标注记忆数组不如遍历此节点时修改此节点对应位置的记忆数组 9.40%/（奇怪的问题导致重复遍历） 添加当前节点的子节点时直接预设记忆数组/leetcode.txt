@@ -1,0 +1,63 @@
+class Solution {
+    class point {
+        int x;
+        int y;
+        int re;
+
+        public point(int x, int y, int re) {
+            this.x = x;
+            this.y = y;
+            this.re = re;
+        }
+    }
+
+    int ROWS;
+    int COLS;
+    int[][] fourDir = new int[][]{
+            {1, 0},
+            {-1, 0},
+            {0, 1},
+            {0, -1}
+    };
+
+    public int shortestPath(int[][] grid, int k) {
+        ROWS = grid.length;
+        COLS = grid[0].length;
+        Deque<point> deque = new LinkedList<>();
+        boolean[][][] visited = new boolean[ROWS][COLS][k + 1];
+        deque.addLast(new point(0, 0, k));
+        visited[0][0][k] = true;
+        int res = 0;
+        while (!deque.isEmpty()) {
+            int size = deque.size();
+            for (int i = size; i > 0; --i) {
+                point prepoint = deque.pollFirst();
+
+                if (prepoint.x == ROWS - 1 && prepoint.y == COLS - 1)
+                    return res;
+
+                for (int[] dir : fourDir) {
+                    int xN = prepoint.x + dir[0];
+                    int yN = prepoint.y + dir[1];
+                    int preRe = prepoint.re;
+                    if (xN >= 0 && xN <= ROWS - 1 && yN >= 0 && yN <= COLS - 1 && !visited[xN][yN][preRe]) {
+                        if (grid[xN][yN] == 0) {
+                            point uninsert = new point(xN, yN, preRe);
+                            deque.addLast(uninsert);
+                            visited[xN][yN][preRe] = true;
+                        } else {
+                            if (preRe> 0) {
+                                point uninsert = new point(xN, yN, preRe - 1);
+                                deque.addLast(uninsert);
+                                visited[xN][yN][preRe - 1] = true;
+                            }
+                        }
+                    }
+                }
+            }
+            res++;
+        }
+
+        return -1;
+    }
+}

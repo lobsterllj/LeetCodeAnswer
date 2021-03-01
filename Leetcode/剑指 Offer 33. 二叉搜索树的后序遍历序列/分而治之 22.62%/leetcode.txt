@@ -1,0 +1,32 @@
+class Solution {
+    public boolean verifyPostorder(int[] postorder) {
+        if (postorder.length < 3)
+            return true;
+        return issearch(postorder, 0, postorder.length - 1);
+    }
+
+    public boolean issearch(int[] postorder, int sta, int end) {
+        if (sta == end)
+            return true;
+        boolean left = false;
+        int index_left = -1;
+        for (int i = end - 1; i >= sta; --i) {
+            if (left) {
+                if (postorder[i] > postorder[end])
+                    return false;
+            }
+            if (postorder[i] < postorder[end]) {
+                left = true;
+                index_left = i;
+            }
+        }
+        //左子树为空，遍历右子树合理性
+        if (index_left == -1)
+            return issearch(postorder, sta, end - 1);
+        //右子树为空，遍历左子树合理性
+        else if(index_left==sta)
+            return issearch(postorder, sta, end - 1);
+        else
+            return issearch(postorder, sta, index_left) && issearch(postorder, index_left + 1, end - 1);
+    }
+}

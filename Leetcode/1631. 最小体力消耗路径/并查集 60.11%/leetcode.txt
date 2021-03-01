@@ -1,0 +1,105 @@
+class Solution {
+    class edge {
+        public int x;
+        public int y;
+        public int dis;
+
+        public edge(int x, int y, int dis) {
+            this.x = x;
+            this.y = y;
+            this.dis = dis;
+        }
+
+        public int getDis() {
+            return dis;
+        }
+    }
+
+
+    int rows;
+    int cols;
+
+    public int minimumEffortPath(int[][] heights) {
+
+        rows = heights.length;
+        cols = heights[0].length;
+        int last = rows * cols - 1;
+
+        unionFind unionFind = new unionFind(rows * cols);
+
+        List<edge> edgeList = new ArrayList<edge>();
+        List<int[]> edges = new ArrayList<>();
+
+        for (int row = 0; row < rows; ++row) {
+            for (int col = 1; col < cols; ++col) {
+                edge cache = new edge(getIndex(row, col - 1), getIndex(row, col), Math.abs(heights[row][col] - heights[row][col - 1]));
+                edgeList.add(cache);
+            }
+        }
+
+        for (int col = 0; col < cols; ++col) {
+            for (int row = 1; row < rows; ++row) {
+                edge cache = new edge(getIndex(row - 1, col), getIndex(row, col), Math.abs(heights[row][col] - heights[row - 1][col]));
+                edgeList.add(cache);
+            }
+        }
+
+        edgeList.sort((e1, e2) -> (e1.dis - e2.dis));
+        for (edge it : edgeList) {
+            unionFind.union(it.x, it.y);
+            if (unionFind.isConnected(0, last)) {
+                return it.dis;
+            }
+        }
+        return 0;
+
+    }
+
+    public int getIndex(int row, int col) {
+        return row * cols + col;
+    }
+
+    private class unionFind {
+        int[] fathers;
+        int[] size;
+        int groupNum;
+
+        public unionFind(int n) {
+            fathers = new int[n];
+            size = new int[n];
+            groupNum = n;
+            for (int i = 0; i < n; ++i) {
+                fathers[i] = i;
+                size[i] = 1;
+            }
+        }
+
+        public int find(int x) {
+            if (x != fathers[x]) {
+                fathers[x] = find(fathers[x]);
+            }
+            return fathers[x];
+        }
+
+        public void union(int x, int y) {
+            int rootX = find(x);
+            int rootY = find(y);
+            if (rootX == rootY)
+                return;
+            if (size[rootX] < size[rootY]) {
+                fathers[rootX] = rootY;
+                size[rootY] += size[rootX];
+            } else {
+                fathers[rootY] = rootX;
+                size[rootX] += size[rootY];
+            }
+            groupNum--;
+            return;
+        }
+
+        public boolean isConnected(int x, int y) {
+            return find(x) == find(y);
+        }
+
+    }
+}

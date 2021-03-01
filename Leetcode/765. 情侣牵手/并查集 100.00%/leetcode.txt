@@ -1,0 +1,64 @@
+class Solution {
+    public int minSwapsCouples(int[] row) {
+        int len = row.length;
+        int numCouple = len >>> 1;
+        UnionFind unionFind = new UnionFind(numCouple);
+
+        for (int i = 0; i < numCouple; ++i) {
+            int p1 = row[2 * i];
+            int p2 = row[2 * i + 1];
+            unionFind.union(p1 / 2, p2 / 2);
+        }
+        return unionFind.getGroup();
+
+    }
+
+    class UnionFind {
+        int[] fathers;
+        int[] size;
+        int groupNum;
+        int capacity;
+
+        public UnionFind(int n) {
+            groupNum = n;
+            capacity = n;
+            fathers = new int[n];
+            size = new int[n];
+            for (int i = 0; i < n; ++i) {
+                fathers[i] = i;
+                size[i] = 1;
+            }
+        }
+
+        public int find(int x) {
+            if (x != fathers[x])
+                fathers[x] = find(fathers[x]);
+            return fathers[x];
+        }
+
+        public void union(int x, int y) {
+            int rootX = find(x);
+            int rootY = find(y);
+            if (rootX == rootY)
+                return;
+            if (size[rootX] < size[rootY]) {
+                fathers[rootX] = rootY;
+                size[rootY] += size[rootX];
+            } else {
+                fathers[rootY] = rootX;
+                size[rootX] += size[rootY];
+            }
+            groupNum--;
+        }
+
+        public int getGroup() {
+            int cnt = 0;
+            for (int i = 0; i < capacity; ++i) {
+                if (find(i) != i)
+                    cnt++;
+            }
+            return cnt;
+        }
+
+    }
+}

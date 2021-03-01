@@ -1,0 +1,18 @@
+class Solution {
+    public void hanota(List<Integer> A, List<Integer> B, List<Integer> C) {
+        recur(A.size(), A, C, B);
+    }
+
+    public void recur(int num, List<Integer> src, List<Integer> tar, List<Integer> cache) {
+        if (num == 1) {
+            tar.add(src.get(src.size() - 1));
+            src.remove(src.size() - 1);
+            return;
+        }
+        recur(num - 1, src, tar, cache);
+        recur(num - 1, tar, cache, src);
+        tar.add(src.get(src.size() - 1));
+        src.remove(src.size() - 1);
+        recur(num - 1, cache, tar, src);
+    }
+}

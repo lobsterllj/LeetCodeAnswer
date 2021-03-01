@@ -1,0 +1,19 @@
+class Solution {
+    public int largestPerimeter(int[] A) {
+        Arrays.sort(A);
+        int n = A.length;
+        int large = n - 1;
+        int mid = n - 2;
+        int small = n - 3;
+        while (small >= 0) {
+            if ((A[small] + A[mid]) > A[large]) {
+                return A[small] + A[mid] + A[large];
+            } else {
+                large--;
+                mid--;
+                small--;
+            }
+        }
+        return 0;
+    }
+}

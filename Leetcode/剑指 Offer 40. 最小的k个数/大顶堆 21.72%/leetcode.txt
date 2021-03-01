@@ -1,0 +1,21 @@
+class Solution {
+    public int[] getLeastNumbers(int[] arr, int k) {
+        if(k==0)
+            return new int[]{};
+        PriorityQueue<Integer> maxheap=new PriorityQueue<>((a,b)->b-a);
+        for(int i=0;i<arr.length;++i){
+            if(maxheap.size()<k)
+                maxheap.add(arr[i]);
+            else if(maxheap.peek()>arr[i]){
+                maxheap.poll();
+                maxheap.add(arr[i]);
+            }
+        }
+        int[] res=new int[k];
+        int index=0;
+        while(index<k){
+            res[index++]=maxheap.poll();
+        }
+        return res;
+    }
+}

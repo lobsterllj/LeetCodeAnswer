@@ -1,0 +1,53 @@
+import java.util.*;
+
+public class main {
+    public static void main(String[] args) {
+        main main = new main();
+        int[] prices = new int[]{1, 3, 2, 8, 4, 9};
+        System.out.println(main.maxProfit(prices, 2));
+    }
+
+    public int maxProfit(int[] prices, int fee) {
+        int n = prices.length;
+        if (n == 1)
+            return 0;
+        //当天持有股票，累计收益最大值
+        int[] dpHas = new int[n + 1];
+
+        //当天不持有股票，累计收益最大值
+        int[] dpNone = new int[n + 1];
+        dpHas[0] = -prices[0];
+        dpNone[0] = 0;
+
+        for (int i = 1; i < n + 1; ++i) {
+            //今天持有股票分为两证情况
+            //昨天就持有股票，今天继续持有这张股票 dpHas[i - 1]
+            //昨天不持有股票，昨天买入股票 dpNone[i - 1] - prices[i - 1]
+            //特别注意买入股票没有手续费
+            dpHas[i] = Math.max(dpHas[i - 1], dpNone[i - 1] - prices[i - 1]);
+
+            //今天不持有股票分为两种情况
+            //把昨天持有的股票(在昨天)卖了 dpHas[i - 1] + prices[i - 1] - fee
+            //昨天本来就没持有股票 dpNone[i - 1]
+            dpNone[i] = Math.max(dpHas[i - 1] + prices[i - 1] - fee, dpNone[i - 1]);
+        }
+        System.out.println("dpNone[i]:");
+        for (int i = 0; i < n + 1; ++i) {
+            System.out.print(dpNone[i] + " ");
+        }
+        System.out.println();
+        System.out.println("dpHas[i]:");
+        for (int i = 0; i < n + 1; ++i) {
+            System.out.print(dpHas[i] + " ");
+
+        }
+        System.out.println();
+
+        //结束后的一天不持有股票即表示 最后一天不持有或者卖掉了手里的股票
+        return dpNone[n];
+
+    }
+
+
+}
+

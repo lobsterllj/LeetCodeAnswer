@@ -1,0 +1,32 @@
+class Solution {
+    public int largestSubmatrix(int[][] matrix) {
+        int Rows = matrix.length;
+        int Cols = matrix[0].length;
+        int[][] heights = new int[Rows][Cols];
+        for (int col = 0; col < Cols; ++col) {
+            heights[0][col] = matrix[0][col];
+        }
+        for (int row = 1; row < Rows; ++row) {
+            for (int col = 0; col < Cols; ++col) {
+                if (matrix[row][col] == 1) {
+                    heights[row][col] = heights[row - 1][col] + 1;
+                }
+            }
+        }
+
+        for (int row = 0; row < Rows; ++row) {
+            Arrays.sort(heights[row]);
+        }
+
+        int res = 0;
+        for (int row = 0; row < Rows; ++row) {
+            for (int col = Cols - 1; col > -1; --col) {
+                int cache = heights[row][col] * (Cols-col);
+                res = Math.max(res, cache);
+            }
+        }
+
+        return res;
+    }
+
+}

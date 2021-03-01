@@ -1,0 +1,58 @@
+class Solution {
+    class unionFind{
+        private int[] fathers;
+        private int[] size;
+        private int groupNums;
+        private int freelinks;
+
+        public unionFind(int n){
+            fathers = new int[n];
+            size = new int[n];
+            groupNums = n;
+            freelinks = 0;
+
+            for(int i = 0; i < n; ++i){
+                fathers[i] = i;
+                size[i] = 1;
+            }
+        }
+
+        public int find(int x){
+            if(x != fathers[x]){
+                fathers[x] = find(fathers[x]);
+            }
+            return fathers[x];
+        }
+
+        public void union(int x, int y){
+            int rootX = find(x);
+            int rootY = find(y);
+            if(rootX == rootY){
+                freelinks++;
+                return;
+            }
+            if(size[rootX] < size[rootY]){
+                fathers[rootX] = rootY;
+                size[rootY] += size[rootX];
+            }else{
+                fathers[rootY] = rootX;
+                size[rootX] += size[rootY];
+            }
+            groupNums--;
+        }
+
+    }
+    public int makeConnected(int n, int[][] connections) {
+        int lenC = connections.length;
+        if(lenC < n-1){
+            return -1;
+        }
+        unionFind unionFind=new unionFind(n);
+        for(int i = 0; i < lenC; ++i){
+            unionFind.union(connections[i][0],connections[i][1]);
+        }
+        if(unionFind.groupNums>unionFind.freelinks + 1)
+            return -1;
+        return unionFind.groupNums-1;
+    }
+}

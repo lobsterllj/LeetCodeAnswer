@@ -1,0 +1,18 @@
+class Solution {
+    public char firstUniqChar(String s) {
+        if(s.length()==0)
+            return ' ';
+        char[] chars=s.toCharArray();
+        Map<Character,Integer> index2cnts=new HashMap<>();
+        for(int i=0;i<chars.length;++i){
+            int cache=index2cnts.getOrDefault(chars[i],0)+1;
+            index2cnts.put(chars[i],cache);
+        }
+        char res=' ';
+        for(int i=chars.length-1;i>-1;--i){
+            if(index2cnts.get(chars[i])==1)
+                res=chars[i];
+        }
+        return res;
+    }
+}

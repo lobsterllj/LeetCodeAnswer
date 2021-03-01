@@ -1,0 +1,32 @@
+class Solution {
+    public boolean isValid(String s) {
+        if(s.equals(null))
+            return true;
+        char[] chars = s.toCharArray();
+        Deque<Character> stack = new ArrayDeque<>();
+        for(int i = 0; i < chars.length; ++i){
+            if(chars[i] == '(' || chars[i] == '[' || chars[i] == '{' )
+                stack.addLast(chars[i]);
+            else if(chars[i] == ')'){
+                if(stack.isEmpty())
+                    return false;
+                if(stack.pollLast() != '('){
+                    return false;
+                }
+            }else if(chars[i] == ']'){
+                if(stack.isEmpty())
+                    return false;
+                if(stack.pollLast() != '['){
+                    return false;
+                }
+            }else if(chars[i] == '}'){
+                if(stack.isEmpty())
+                    return false;
+                if(stack.pollLast() != '{'){
+                    return false;
+                }
+            }
+        }
+        return stack.isEmpty();
+    }
+}

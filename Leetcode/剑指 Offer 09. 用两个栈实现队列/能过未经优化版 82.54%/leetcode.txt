@@ -1,0 +1,32 @@
+class CQueue {
+        Deque<Integer> in;
+        Deque<Integer> out;
+
+        public CQueue() {
+            this.in = new ArrayDeque<>();
+            this.out = new ArrayDeque<>();
+        }
+
+        public void appendTail(int value) {
+            in.addFirst(value);
+        }
+
+        public int deleteHead() {
+            if (out.isEmpty()) {
+                while (!in.isEmpty()) {
+                    out.addFirst(in.pollFirst());
+                }
+            }
+            if (out.isEmpty()) {
+                return -1;
+            }
+            return out.pollFirst();
+        }
+    }
+
+/**
+ * Your CQueue object will be instantiated and called as such:
+ * CQueue obj = new CQueue();
+ * obj.appendTail(value);
+ * int param_2 = obj.deleteHead();
+ */

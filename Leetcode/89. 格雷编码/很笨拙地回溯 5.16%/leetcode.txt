@@ -1,0 +1,57 @@
+class Solution {
+    int ns;
+    public List<Integer> grayCode(int n) {
+        ns = n;
+        int len = (int)Math.pow(2, n);
+        boolean[] visited = new boolean[len];
+
+        List<Integer> res = new ArrayList<>();
+        res.add(0);
+        if (len == 1)
+            return res;
+        visited[0] = true;
+        
+        int index = 0;
+        while (index < len - 1){
+            int next = getNext(res.get(index), visited);
+            res.add(next);
+            visited[next] = true;
+            index++;
+        }
+        return res;
+    }
+
+    
+    public int getNext(int num, boolean[] visited){
+        int[] bin = dec2Bin(num);
+        for (int i = 0; i < ns; ++i){
+            int cache = bin[i];
+            bin[i] = (bin[i] + 1) % 2;
+            int next = bin2Dec(bin);
+            if (!visited[next])
+                return next;
+            bin[i] = cache;
+        }
+        return -1;
+    }
+
+    public int[] dec2Bin(int num){
+        int[] res = new int[ns];
+        int index = 0;
+        while (num > 0){
+            res[index++] = num % 2;
+            num /= 2;
+        }
+        return res;
+    }
+
+    public int bin2Dec(int[] bin){
+        int res = 0;
+        int len = bin.length;
+        for (int i = len - 1; i > -1; --i){
+            res = res * 2 + bin[i];
+        }
+        return res;
+    }
+
+}

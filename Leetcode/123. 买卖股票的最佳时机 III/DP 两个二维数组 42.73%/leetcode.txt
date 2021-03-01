@@ -1,0 +1,34 @@
+class Solution {
+    public int maxProfit(int[] prices) {
+        int len = prices.length;
+        if (len < 2)
+            return 0;
+        int[][] hold = new int[len][3];
+        int[][] none = new int[len][3];
+        for (int i = 0; i < 3; ++i) {
+            none[0][i] = 0;
+            hold[0][i] = -prices[0];
+        }
+        for (int i = 1; i < len; ++i) {
+            for (int j = 0; j < 3; ++j) {
+                hold[i][j] = Math.max(
+                        none[i - 1][j] - prices[i],
+                        hold[i - 1][j]
+                );
+            }
+            for (int j = 0; j < 2; ++j) {
+                none[i][j] = Math.max(
+                        hold[i - 1][j + 1] + prices[i],
+                        none[i - 1][j]
+                );
+            }
+        }
+
+        int res = 0;
+        for (int i = 0; i < 3; ++i) {
+            res = Math.max(none[len - 1][i], res);
+        }
+        return res;
+    }
+
+}

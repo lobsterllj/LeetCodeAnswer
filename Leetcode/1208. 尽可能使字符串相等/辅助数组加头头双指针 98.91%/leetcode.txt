@@ -1,0 +1,29 @@
+class Solution {
+    public int equalSubstring(String s, String t, int maxCost) {
+        char[] charsS=s.toCharArray();
+        char[] charsT=t.toCharArray();
+        int len = charsS.length;
+        int[] dif = new int[len];
+        for(int i = 0; i < len; ++i){
+            dif[i] = Math.abs(charsS[i]-charsT[i]);
+        }
+        int first = 0;
+        int last = 0;
+        int res = 0;
+        int cost = 0;
+        while (last < len){
+            cost += dif[last++];
+            while (first < last && cost > maxCost){
+                cost -= dif[first];
+                first++;
+            }
+            if (first == last && cost > maxCost){
+                first++;
+                last++;
+            }
+            res = Math.max(res, last - first);
+        }
+
+        return res;
+    }
+}

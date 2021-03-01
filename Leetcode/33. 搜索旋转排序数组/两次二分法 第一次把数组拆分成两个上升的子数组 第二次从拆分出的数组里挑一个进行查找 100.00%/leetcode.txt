@@ -1,0 +1,59 @@
+
+class Solution {
+    public int search(int[] nums, int target) {
+        int len = nums.length;
+        if (len == 1){
+            if (nums[0] == target)
+                return 0;
+            else
+                return -1;
+        }
+
+
+
+        // 拆成两个连续上升区间
+        int sta = 0;
+        int end = len - 1;
+        int com = 0;
+        if (nums[0] > nums[end]){
+            while (sta < end){
+                com = (sta + end + 1) >>> 1;
+                if (nums[sta] < nums[end]){
+                    sta = end;
+                    break;
+                }
+                if (nums[com] < nums[end]){
+                    end = com - 1;
+                }else{
+                    sta = com;
+                }
+            }
+            // System.out.println(sta);
+            if (nums[sta] == target)
+                return sta;
+            if (nums[0] <= target){
+                end = sta;
+                sta = 0;
+            }else{
+                sta++;
+                end = len - 1;
+            }
+        }
+        
+
+        while (sta < end){
+            com = (sta + end) >>> 1;
+            if (nums[com] < target){
+                sta = com + 1;
+            }else{
+                end = com;
+            }
+        }
+        if (sta >= len)
+            return -1;
+        return nums[sta] == target ? sta : -1;
+
+
+    }
+    
+}

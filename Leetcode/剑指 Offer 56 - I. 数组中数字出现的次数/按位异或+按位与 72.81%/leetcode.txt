@@ -1,0 +1,26 @@
+class Solution {
+    public int[] singleNumbers(int[] nums) {
+        int XOR=nums[0];
+        for(int i=1;i<nums.length;++i){
+            XOR^=nums[i];
+        }
+        int pivot=1;
+        while(XOR>0){
+            if((XOR&1)==1){
+                break;
+            }
+            pivot*=2;
+            XOR/=2;
+        }
+        int n1=0;
+        int n2=0;
+        for(int i=0;i<nums.length;++i){
+            if((nums[i]&pivot)==0){
+                n1^=nums[i];
+            }else{
+                n2^=nums[i];
+            }
+        }
+        return new int[]{n1,n2};
+    }
+}

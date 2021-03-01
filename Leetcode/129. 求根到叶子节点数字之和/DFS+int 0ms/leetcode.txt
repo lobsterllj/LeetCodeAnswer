@@ -1,0 +1,29 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public int sumNumbers(TreeNode root) {
+        if (root == null)
+            return 0;
+        int res = 0;
+        return dfs(root, res);
+    }
+
+    public int dfs(TreeNode root, int cache) {
+        if (root == null)
+            return 0;
+//        System.out.println(root.val);
+        cache = cache * 10 + root.val;
+//        System.out.println("cache:" + cache);
+        if (root.left == null && root.right == null) {
+            return cache;
+        }
+        return dfs(root.left, cache) + dfs(root.right, cache);
+    }
+}

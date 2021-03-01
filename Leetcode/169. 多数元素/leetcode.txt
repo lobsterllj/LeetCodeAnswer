@@ -1,0 +1,29 @@
+class Solution {
+    public int majorityElement(int[] nums) {
+        Solution aa=new Solution();
+        return aa.major(nums);
+
+    }
+    public int major(int[] nums)
+    {
+        int res=nums[0];
+        int num_res=1;
+        for (int i=1;i<nums.length;++i)
+        {
+            if(nums[i]==res)
+            {
+                num_res++;
+            }
+            else
+            {
+                num_res--;
+            }
+            if(num_res==0)
+            {
+                res=nums[i];
+                num_res=1;
+            }
+        }
+        return res;
+    }
+}

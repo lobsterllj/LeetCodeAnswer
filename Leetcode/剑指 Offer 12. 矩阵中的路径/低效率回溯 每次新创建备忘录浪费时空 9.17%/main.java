@@ -1,0 +1,73 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class main {
+
+    public static void main(String[] args) {
+        main main = new main();
+        char[][] board = new char[][]{{'A', 'B', 'C', 'E'}, {'S', 'F', 'C', 'S'}, {'A', 'D', 'E', 'E'}};
+        String word = "ABCCED";
+
+        char[][] board1 = new char[][]{{'a', 'a','b'}};
+        String word1 = "aaa";
+        System.out.println(main.exist(board, word));
+    }
+
+    int row_nums;
+    int col_nums;
+
+    public boolean exist(char[][] board, String word) {
+        row_nums = board.length;
+        col_nums = board[0].length;
+        if (row_nums == 1 && col_nums == 1 && word.length() == 1)
+            return board[0][0] == word.charAt(0);
+        boolean[][] visit;
+        char[] words = word.toCharArray();
+        for (int i = 0; i < row_nums; ++i) {
+            for (int j = 0; j < col_nums; ++j) {
+                if (board[i][j] == word.charAt(0)) {
+                    visit = new boolean[row_nums][col_nums];
+                    if (recallfind(board, visit, words, i, j, 0))
+                        return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean recallfind(char[][] board, boolean[][] visit, char[] words, int row, int col, int index) {
+        System.out.println("row: " +row+"   col:"+col+"  index:"+index);
+        visit[row][col]=true;
+        for (int i = 0; i < row_nums; ++i) {
+            for (int j = 0; j < col_nums; ++j) {
+                System.out.print(visit[i][j]+" ");
+            }
+            System.out.println();
+        }
+        if (index == words.length - 1)
+            return true;
+        List<int[]> ValidAround = new ArrayList<>();
+        if (row + 1 <= row_nums - 1 && !visit[row + 1][col] && board[row + 1][col] == words[index + 1]) {
+            ValidAround.add(new int[]{row + 1, col});
+        }
+        if (row - 1 >= 0 && !visit[row - 1][col] && board[row - 1][col] == words[index + 1]) {
+            ValidAround.add(new int[]{row - 1, col});
+        }
+        if (col + 1 <= col_nums - 1 && !visit[row][col + 1] && board[row][col + 1] == words[index + 1]) {
+            ValidAround.add(new int[]{row, col + 1});
+        }
+        if (col - 1 >= 0 && !visit[row][col - 1] && board[row][col - 1] == words[index + 1]) {
+            ValidAround.add(new int[]{row, col - 1});
+        }
+
+        for (int[] it : ValidAround) {
+            if (recallfind(board, visit, words, it[0], it[1], index + 1))
+                return true;
+            visit[it[0]][it[1]] = false;
+        }
+        return false;
+
+    }
+
+
+}

@@ -1,0 +1,20 @@
+class Solution {
+    public int firstMissingPositive(int[] nums) {
+        int len = nums.length;
+        if (len == 0 )
+            return 1;
+        boolean flag;
+        for (int res = 1; res < len + 2; ++res){
+            flag = false;
+            for (int i = 0; i < len; ++i){
+                if (nums[i] == res){
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag)
+                return res;
+        }
+        return 1;
+    }
+}

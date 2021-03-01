@@ -1,0 +1,61 @@
+class Solution {
+    public String reverseVowels(String s) {
+        char[] chars = s.toCharArray();
+        int len = chars.length;
+        if (len < 2)
+            return s;
+        
+        // Set<Character> set = new HashSet<>();
+        // set.add('a');
+        // set.add('e');
+        // set.add('i');
+        // set.add('o');
+        // set.add('u');
+        // set.add('A');
+        // set.add('E');
+        // set.add('I');
+        // set.add('O');
+        // set.add('U');
+        int left = 0;
+        int right = len - 1;
+        while (left < len && right > -1 && left < right){
+            //从左到右第一个元音
+            while (left < len){
+                if(!isYuan(chars[left])){
+                    left++;
+                }else{
+                    break;
+                }
+            }
+            //从右到左第一个元音
+            while (right > -1){
+                if(!isYuan(chars[right])){
+                    right--;
+                }else{
+                    break;
+                }
+            }
+
+            if (left < len && right > -1 && left < right){
+                char cache = chars[left];
+                chars[left] = chars[right];
+                chars[right] = cache;
+                left++;
+                right--;
+            }
+            
+        }
+
+        // StringBuilder res = new StringBuilder();
+        // for(int i = 0; i < len; ++i){
+        //     res.append(chars[i]);
+        // }
+        // return res.toString();
+        return String.valueOf(chars);
+    }
+
+    public boolean isYuan(char c) {
+        return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u' 
+                       || c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U';
+    }
+}

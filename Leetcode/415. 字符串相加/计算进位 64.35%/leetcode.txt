@@ -1,0 +1,62 @@
+class Solution {
+    public String addStrings(String num1, String num2) {
+        char[] chars1 = num1.toCharArray();
+        char[] chars2 = num2.toCharArray();
+        int len1 = chars1.length;
+        int len2 = chars2.length;
+        if(len1 == 0)
+            return num2;
+        if(len2 == 0)
+            return num1;
+        List<Integer> res_rev = new ArrayList<>();
+        int index1 = len1 - 1;
+        int index2 = len2 - 1;
+        int carry = 0;
+        while(index1 > -1 && index2 > -1){
+            int i1 = chars1[index1] - '0';
+            int i2 = chars2[index2] - '0';
+            int sum = i1 + i2 + carry;
+            if(sum > 9){
+                sum -= 10;
+                carry = 1;
+            }else{
+                carry = 0;
+            }
+            res_rev.add(sum);
+            index1--;
+            index2--;
+        }
+        while(index1 > -1){
+            int i1 = chars1[index1] - '0';
+            int sum = i1 + carry;
+            if(sum > 9){
+                sum -= 10;
+                carry = 1;
+            }else{
+                carry = 0;
+            }
+            res_rev.add(sum);
+            index1--;
+        }
+        while(index2 > -1){
+            int i2 = chars2[index2] - '0';
+            int sum = i2 + carry;
+            if(sum > 9){
+                sum -= 10;
+                carry = 1;
+            }else{
+                carry = 0;
+            }
+            res_rev.add(sum);
+            index2--;
+        }
+        if(carry > 0)
+            res_rev.add(1);
+        
+        StringBuilder res = new StringBuilder();
+        for(int i = res_rev.size()-1; i > -1; --i){
+            res.append(res_rev.get(i));
+        }
+        return res.toString();
+    }
+}

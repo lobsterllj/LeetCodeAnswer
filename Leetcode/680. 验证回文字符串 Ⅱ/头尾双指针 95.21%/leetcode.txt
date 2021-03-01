@@ -1,0 +1,26 @@
+class Solution {
+    public boolean validPalindrome(String s) {
+        char[] chars = s.toCharArray();
+        int len = chars.length;
+        if (len < 3)
+            return true;
+        int sta = 0;
+        int end = len - 1;
+        while (sta < end){
+            if(chars[sta] != chars[end])
+                return isPa(chars, sta + 1, end) || isPa(chars, sta, end - 1);
+            sta++;
+            end--;
+        }
+        return true;
+    }
+    public boolean isPa(char[] chars, int sta, int end){
+        while (sta < end){
+            if(chars[sta] != chars[end])
+                return false;
+            sta++;
+            end--;
+        }
+        return true;
+    }
+}

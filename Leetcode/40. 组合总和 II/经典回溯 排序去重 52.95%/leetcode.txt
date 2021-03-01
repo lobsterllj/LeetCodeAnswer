@@ -1,0 +1,44 @@
+class Solution {
+    int len;
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        len = candidates.length;
+        List<List<Integer>> res = new ArrayList<>();
+        List<Integer> cache = new ArrayList<>();
+        boolean[] visited = new boolean[len];
+        Arrays.sort(candidates);
+        // for (int it : candidates){
+        //     System.out.print(it + " ");
+        // }
+        // System.out.println();
+        backTracking(res, cache, candidates, visited, target, 0);
+        return res;
+    }
+
+    public void backTracking(List<List<Integer>> res, List<Integer> cache, int[] candidates, boolean[] visited, int target, int index){
+        if (target < 0 || index > len){
+            return;
+        }
+
+        if (target == 0){
+            List<Integer> temp = new ArrayList<>(cache);
+            res.add(temp);
+            return;
+        }
+
+        for (int i = index; i < len; ++i){
+            if (visited[i])
+                continue;
+            if (i > 0 && !visited[i - 1] && candidates[i] == candidates[i - 1]){
+                continue;
+            }
+            visited[i] = true;
+            target -= candidates[i];
+            cache.add(candidates[i]);
+            backTracking(res, cache, candidates, visited, target, i + 1);
+            cache.remove(cache.size() - 1);
+            target += candidates[i];
+            visited[i] = false;
+        }
+
+    }
+}

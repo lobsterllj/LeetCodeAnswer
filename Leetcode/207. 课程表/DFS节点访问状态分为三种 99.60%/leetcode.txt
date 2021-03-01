@@ -1,0 +1,34 @@
+class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        if (numCourses == 1)
+            return true;
+        ArrayList<List<Integer>> Adjacency = new ArrayList<>();
+        for (int i = 0; i < numCourses; ++i) {
+            Adjacency.add(new ArrayList<Integer>());
+        }
+        for (int[] it : prerequisites) {
+            Adjacency.get(it[1]).add(it[0]);
+        }
+        int[] visitedState=new int[numCourses];
+        for(int i=0;i<numCourses;++i){
+            if(!dfs(i,Adjacency,visitedState))
+                return false;
+        }
+        return true;
+    }
+
+    public boolean dfs(int node,ArrayList<List<Integer>> adj,int[] vst) {
+        if(vst[node]==1)
+            return false;
+        else if(vst[node]==-1)
+            return true;
+        vst[node]=1;
+        List<Integer> cache=adj.get(node);
+        for(Integer it:cache){
+            if(!dfs(it,adj,vst))
+                return false;
+        }
+        vst[node]=-1;
+        return true;
+    }
+}

@@ -1,0 +1,25 @@
+class Solution {
+    public boolean wordPattern(String pattern, String s) {
+        char[] ps = pattern.toCharArray();
+        String[] ss = s.split(" ");
+        if (ps.length != ss.length)
+            return false;
+        Map<String,Integer> map = new HashMap<>();
+
+
+        for (int i = 0; i < ss.length; ++i) {
+
+            if (!map.containsKey(ss[i])) {
+                map.put(ss[i],ps[i] - 'a' );
+            }
+            if (map.get(ss[i])!=ps[i]-'a')
+                return false;
+
+        }
+        Set<Integer> cnt=new HashSet<>();
+        for(String it:map.keySet()){
+            cnt.add(map.get(it));
+        }
+        return cnt.size()==map.size();
+    }
+}

@@ -1,0 +1,40 @@
+class Solution {
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        if (numCourses == 1)
+            return new int[]{0};
+        ArrayList<List<Integer>> adj = new ArrayList<>();
+        for (int i = 0; i < numCourses; ++i)
+            adj.add(new ArrayList<>());
+        for (int[] it : prerequisites) {
+            adj.get(it[1]).add(it[0]);
+        }
+        int[] vst = new int[numCourses];
+
+        Deque<Integer> res = new ArrayDeque<>();
+        int[] way = new int[numCourses];
+        int index = 0;
+        for (int i = 0; i < numCourses; ++i) {
+            if (!dfs1(i, adj, vst, res))
+                return new int[]{};
+        }
+        while (!res.isEmpty()) {
+            way[index++]=res.pollFirst();
+        }
+        return way;
+    }
+
+    public boolean dfs1(int node, ArrayList<List<Integer>> adj, int[] vst, Deque<Integer> res) {
+        if (vst[node] == 1)
+            return false;
+        else if (vst[node] == -1)
+            return true;
+        vst[node] = 1;
+        for (Integer it : adj.get(node)) {
+            if (!dfs1(it, adj, vst, res))
+                return false;
+        }
+        res.addFirst(node);
+        vst[node] = -1;
+        return true;
+    }
+}

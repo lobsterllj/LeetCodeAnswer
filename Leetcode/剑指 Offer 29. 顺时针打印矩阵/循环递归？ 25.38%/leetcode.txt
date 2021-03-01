@@ -1,0 +1,44 @@
+class Solution {
+    int rowsc;
+    int colsc;
+    int nums;
+    int dir;
+    int[] res;
+    int index;
+    public int[] spiralOrder(int[][] matrix) {
+        if(matrix.length==0||matrix[0].length==0)
+            return new int[]{};
+        rowsc=matrix.length;
+        colsc=matrix[0].length;
+        nums=rowsc*colsc;
+        res=new int[nums];
+        index=0;
+        boolean[][] visited=new boolean[rowsc][colsc];
+
+        prt(matrix,visited,0,0);
+        return res;
+    }
+    public void prt(int[][] matrix, boolean[][] visited, int row, int col) {
+        if (row >= rowsc || row < 0 || col >= colsc || col < 0 || visited[row][col]) {
+            dir = (dir + 1) % 4;
+            return;
+        }
+        visited[row][col] = true;
+        res[index++] = matrix[row][col];
+        if (dir == 0) {
+            prt(matrix, visited, row, col + 1);
+        }
+        if (dir == 1) {
+            prt(matrix, visited, row + 1, col);
+        }
+        if (dir == 2) {
+            prt(matrix, visited, row, col - 1);
+        }
+        if (dir == 3) {
+            prt(matrix, visited, row - 1, col);
+        }
+        if (dir == 0) {
+            prt(matrix, visited, row, col + 1);
+        }
+    }
+}

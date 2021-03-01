@@ -1,0 +1,39 @@
+class Solution {
+    public int maxEvents(int[][] events) {
+        int len = events.length;
+        if (len == 1)
+            return 1;
+        //先按开始时间升序排序
+        Arrays.sort(events, (e1, e2) -> e1[0] - e2[0]);
+
+        //维护一个按结束时间升序的堆
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+
+        int res = 0;
+        int cur = 1;
+        int index = 0;
+
+        while (!pq.isEmpty() || index < len) {
+            //开始日期相同的入堆
+            while (index < len && events[index][0] == cur) {
+                pq.add(events[index++][1]);
+            }
+
+            //结束时间在当前时间（cur）之前的弹出
+            while (!pq.isEmpty() && pq.peek() < cur) {
+                pq.poll();
+            }
+
+            //选择参会堆顶元素
+            if (!pq.isEmpty()) {
+                res++;
+                pq.poll();
+            }
+
+            //处理下一天
+            cur++;
+        }
+
+        return res;
+    }
+}

@@ -1,0 +1,25 @@
+class Solution {
+    public int missingNumber(int[] nums) {
+        if (nums[0] != 0)
+            return 0;
+        int len = nums.length;
+        int end = len - 1;
+
+        if (nums[end] != len)
+            return len;
+        int sta1 = 0;
+        int com;
+        while (sta1 < end) {
+            com = (sta1 + end) >>> 1;
+            if (nums[com] == com) {
+                //result in [com+1,end]
+                sta1 = com + 1;
+            } else{
+                //nums[com] > com
+                //result in [sta,com]
+                end = com;
+            }
+        }
+        return sta1;
+    }
+}

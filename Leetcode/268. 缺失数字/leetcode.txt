@@ -1,0 +1,19 @@
+class Solution {
+    public int missingNumber(int[] nums) {
+         Solution aa=new Solution();
+         return aa.lostnum(nums);
+
+    }
+    public int lostnum(int[] in)
+    {
+        int res=in.length;
+        for (int i=0;i<in.length;++i)
+        {
+            res^=in[i];
+            res^=i;
+        }
+
+
+        return res;
+    }
+}

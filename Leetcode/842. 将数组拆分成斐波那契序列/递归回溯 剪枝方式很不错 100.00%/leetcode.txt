@@ -1,0 +1,43 @@
+class Solution {
+    public List<Integer> splitIntoFibonacci(String S) {
+        List<Integer> res = new ArrayList<>();
+        if (S.length() < 3)
+            return res;
+        char[] chars=S.toCharArray();
+        if(recall(chars,res,0))
+            return res;
+        return new ArrayList<>();
+    }
+
+    public boolean recall(char[] S_char, List<Integer> res, int index) {
+
+        if (res.size() >= 3 && index == S_char.length) {
+            return true;
+        }
+        for (int i = index; i < S_char.length; ++i) {
+            if (S_char[index] == '0' && i > index)
+                break;
+            long num = chars2long(S_char, index, i + 1);
+            if (num > Integer.MAX_VALUE)
+                break;
+            int size = res.size();
+            if (size >= 2 && num > (res.get(size - 1) + res.get(size - 2)))
+                break;
+            if (size <= 1 || num == (res.get(size - 1) + res.get(size - 2))) {
+                res.add((int) num);
+                if (recall(S_char, res, i + 1))
+                    return true;
+                res.remove(res.size() - 1);
+            }
+        }
+        return false;
+    }
+
+    public long chars2long(char[] chars, int sta, int end) {
+        long res = 0;
+        for (int i = sta; i < end; ++i) {
+            res = res * 10 + (chars[i] - '0');
+        }
+        return res;
+    }
+}

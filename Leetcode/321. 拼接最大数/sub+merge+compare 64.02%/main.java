@@ -1,0 +1,125 @@
+import java.sql.SQLOutput;
+import java.util.*;
+
+public class main {
+
+    public static void main(String[] args) {
+        main main = new main();
+//        int[] ints = new int[]{7, 6, 1, 9, 3, 2, 3, 1, 1};
+//        int[] ints1 = new int[]{4, 0, 9, 9, 0, 5, 5, 4, 7};
+//        int[] res = main.maxNumber(ints, ints1, 9);
+
+        int[] ints = new int[]{2, 5, 6, 4, 4, 0};
+        int[] ints1 = new int[]{7, 3, 8, 0, 6, 5, 7, 6, 2};
+        int[] res = main.maxNumber(ints, ints1, 15);
+
+        System.out.println("result:");
+        for (int i = 0; i < res.length; ++i) {
+            System.out.print(res[i] + " ");
+        }
+        System.out.println();
+        System.out.println("answer:");
+        System.out.println("[7,3,8,2,5,6,4,4,0,6,5,7,6,2,0]");
+    }
+
+    public int[] maxNumber(int[] nums1, int[] nums2, int k) {
+        int n1 = nums1.length;
+        int n2 = nums2.length;
+        if (n1 + n2 == k)
+            return merge(nums1, nums2);
+
+        ArrayList<int[]> k12 = new ArrayList<>();
+        for (int i = 0; i <= k; ++i) {
+            if (i >= 0 && i <= n1 && (k - i) >= 0 && (k - i) <= n2) {
+                k12.add(new int[]{i, k - i});
+            }
+        }
+
+        int[] res = new int[k];
+        res[0] = Integer.MIN_VALUE;
+        for (int[] temp : k12) {
+            int[] i1 = subnums(nums1, temp[0]);
+            int[] i2 = subnums(nums2, temp[1]);
+            int[] cache = merge(i1, i2);
+
+            if (largerthan(cache, res))
+                res = cache;
+        }
+
+        return res;
+    }
+
+    public boolean largerthan(int[] nums1, int[] nums2) {
+        for (int i = 0; i < nums1.length; ++i) {
+            if (nums1[i] == nums2[i])
+                continue;
+            else if (nums1[i] > nums2[i])
+                return true;
+            else
+                return false;
+        }
+        return false;
+    }
+
+    public boolean compare(int[] nums1, int i, int[] nums2, int j) {
+        while (i < nums1.length && j < nums2.length && nums1[i] == nums2[j]) {
+            i++;
+            j++;
+        }
+        if (j == nums2.length)
+            return true;
+        if (i < nums1.length &&nums1[i] > nums2[j])
+            return true;
+        return false;
+
+    }
+
+    public int[] merge(int[] nums1, int[] nums2) {
+        int i = 0;
+        int j = 0;
+        int index = 0;
+        int[] res = new int[nums1.length + nums2.length];
+        while (i < nums1.length && j < nums2.length) {
+            if (compare(nums1, i, nums2, j)) {
+                res[index++] = nums1[i++];
+            } else {
+                res[index++] = nums2[j++];
+            }
+
+        }
+        while (i < nums1.length) {
+            res[index++] = nums1[i++];
+        }
+        while (j < nums2.length) {
+            res[index++] = nums2[j++];
+        }
+        return res;
+    }
+
+
+    public int[] subnums(int[] nums, int k) {
+        if (k == 0)
+            return new int[0];
+        if (k == nums.length)
+            return nums;
+        Deque<Integer> stack = new ArrayDeque<>();
+        int[] res = new int[k];
+        int delete_chance = nums.length - k;
+        for (int it : nums) {
+            while (!stack.isEmpty() && delete_chance > 0 && it > stack.peekFirst()) {
+                stack.pollFirst();
+                delete_chance--;
+            }
+            stack.addFirst(it);
+        }
+        while (delete_chance > 0) {
+            stack.pollFirst();
+            delete_chance--;
+        }
+        int index = 0;
+        while (!stack.isEmpty()) {
+            res[index++] = stack.pollLast();
+        }
+        return res;
+    }
+}

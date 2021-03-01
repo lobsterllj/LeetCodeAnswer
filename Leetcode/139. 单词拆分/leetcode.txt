@@ -1,0 +1,26 @@
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        Solution aa=new Solution();
+        return aa.compare(s,wordDict);
+
+    }
+
+    public boolean compare(String s, List<String> wordDict)
+    {
+        boolean[] res=new boolean[s.length()+1];
+        res[0]=true;
+
+        for(int i=1;i<s.length()+1;++i)
+        {
+            for(int j=0;j<i;++j)
+            {
+                if(res[j]&&wordDict.contains(s.substring(j,i)))
+                {
+                    res[i]=true;
+                    //break;减少循环次数
+                }
+            }
+        }
+        return res[s.length()];
+    }
+}

@@ -1,0 +1,17 @@
+public int findFirstIndex(int[] nums, int target) {
+        int begin = 0;
+        int end = nums.length - 1;
+        int comp;
+        while (begin != end) {
+            comp = (begin + end) >> 1;
+            if (nums[comp] < target)
+                begin = comp + 1;
+                //搜索区间-> [comp+1,end]
+            else
+                end = comp;
+                //搜索区间-> [begin,comp]
+        }
+        if (nums[begin] != target)
+            return -1;
+        return begin;
+    }

@@ -1,0 +1,61 @@
+import javafx.css.Size;
+
+import java.security.PublicKey;
+import java.util.*;
+
+public class main {
+    public static void main(String[] args) {
+        main main = new main();
+        int[][] points = new int[][]{{-2147483646, -2147483645}, {2147483646, 2147483647}};
+        System.out.println(main.findMinArrowShots(points));
+
+    }
+
+    public int findMinArrowShots(int[][] points) {
+        if (points.length == 0)
+            return 0;
+        if (points.length == 1)
+            return 1;
+        int res = 0;
+        Arrays.sort(points, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] ints, int[] t1) {
+                if (ints[0] != t1[0]) {
+                    if (ints[0] < t1[0])
+                        return -1;
+                    else if (ints[0] == t1[0])
+                        return 0;
+                    else
+                        return 1;
+                } else {
+                    if (ints[1] < t1[1])
+                        return -1;
+                    else if (ints[1] == t1[1])
+                        return 0;
+                    else
+                        return 1;
+                }
+            }
+        });
+        for (int i = 1; i < points.length; ++i) {
+            if (interAB(points[i - 1], points[i]) == null)
+                res++;
+            else {
+                points[i] = interAB(points[i - 1], points[i]);
+            }
+        }
+        return res + 1;
+    }
+
+    public int[] interAB(int[] a, int[] b) {
+        if (a[1] < b[0]) {
+            return null;
+        } else if (a[1] <= b[1]) {
+            return new int[]{b[0], a[1]};
+        } else if (a[1] > b[1]) {
+            return b;
+        }
+        return null;
+    }
+
+}

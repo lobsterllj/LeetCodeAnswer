@@ -1,0 +1,28 @@
+class Solution {
+    public List<String> fizzBuzz(int n) {
+        
+        List<String> resL=new ArrayList<>();
+        if(n==0)
+            return resL;
+        String[] res=new String[n];
+
+        for(int i=0;i<n;++i){
+            res[i]=String.valueOf(i+1);
+        }
+        for(int i=2;i<n;i+=3){
+            res[i]="Fizz";
+        }
+        for(int i=4;i<n;i+=5){
+            if(res[i].equals("Fizz"))
+                res[i]+="Buzz";
+            else{
+                res[i]="Buzz";                
+            }
+        }
+        for(int i=0;i<n;++i){
+            resL.add(res[i]);
+        }
+        return resL;
+    }
+
+}

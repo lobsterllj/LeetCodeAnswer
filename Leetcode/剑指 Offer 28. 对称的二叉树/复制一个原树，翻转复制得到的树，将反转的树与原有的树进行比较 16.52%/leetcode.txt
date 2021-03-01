@@ -1,0 +1,59 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean treeEqual(TreeNode root,TreeNode rerse){
+        if(root==null&&rerse==null)
+            return true;
+        if(root==null&&rerse!=null)
+            return false;   
+        if(root!=null&&rerse==null)
+            return false;   
+        if(root.val!= rerse.val)
+            return false;
+        return treeEqual(root.left,rerse.left)&&treeEqual(root.right,rerse.right);
+    }
+    public TreeNode getCopy(TreeNode root){
+        if(root==null)
+            return null;
+
+        TreeNode copy=new TreeNode(root.val);
+        copy.left=getCopy(root.left);
+        copy.right=getCopy(root.right);
+        return copy;
+    }
+    public TreeNode getReverse(TreeNode root){
+        if(root==null)
+            return null;
+        TreeNode dummy=root;
+        Deque<TreeNode> dq=new ArrayDeque<>();
+        dq.addLast(root);
+        while(!dq.isEmpty()){
+            TreeNode cache=dq.pollFirst();
+            TreeNode temp=cache.left;
+            cache.left=cache.right;
+            cache.right=temp;
+            if(cache.left!=null){
+                dq.addLast(cache.left);   
+            }
+            if(cache.right!=null){
+                dq.addLast(cache.right);
+            }
+        }
+        return dummy;
+    }
+    public boolean isSymmetric(TreeNode root) {
+        if(root==null)
+            return true;
+        TreeNode copy=getCopy(root);
+        TreeNode rerve=getReverse(copy);
+        return treeEqual(root,rerve);
+    }
+    
+}

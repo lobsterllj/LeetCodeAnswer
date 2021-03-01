@@ -1,0 +1,91 @@
+import java.net.CacheRequest;
+import java.util.*;
+
+public class RandomizedCollection {
+    Map<Integer, HashSet<Integer>> map_index;
+    List<Integer> nums_list;
+
+    /**
+     * Initialize your data structure here.
+     */
+    public RandomizedCollection() {
+        map_index = new HashMap<>();
+        nums_list = new ArrayList<>();
+    }
+
+    /**
+     * Inserts a value to the collection. Returns true if the collection did not already contain the specified element.
+     */
+    public boolean insert(int val) {
+        nums_list.add(val);
+        if (!map_index.containsKey(val)) {
+            //原来没有
+            HashSet cache = new HashSet<Integer>();
+            cache.add(nums_list.size() - 1);
+            map_index.put(val, cache);
+            return true;
+        } else {
+            //原来含有
+            HashSet cache = map_index.get(val);
+            cache.add(nums_list.size() - 1);
+            map_index.put(val, cache);
+            return false;
+        }
+    }
+
+    /**
+     * Removes a value from the collection. Returns true if the collection contained the specified element.
+     */
+    public boolean remove(int val) {
+        if (!map_index.containsKey(val)) {
+            return false;
+        }
+
+        HashSet val_SetCache = map_index.get(val);//val对应的索引集合
+        Iterator it_val = val_SetCache.iterator();
+        int val_indexCache = (int) it_val.next();//带处理的val的索引
+
+        int last_num = nums_list.get(nums_list.size() - 1);//num_list末尾元素
+        HashSet last_SetCache = map_index.get(last_num);//尾元素对应的索引集合
+        if (last_num == val) {
+            val_SetCache.remove(nums_list.size() - 1);
+        } else {
+            nums_list.set(val_indexCache, last_num);//将numlist中的val_indexCache位选定的val尾元素
+            last_SetCache.remove(nums_list.size() - 1);
+            last_SetCache.add(val_indexCache);
+            val_SetCache.remove(val_indexCache);
+            map_index.put(last_num, last_SetCache);//更新尾元素对应的元素集合
+            map_index.put(val, val_SetCache);//更新val对应的元素集合
+        }
+        nums_list.remove(nums_list.size() - 1);
+
+        if (val_SetCache.size() == 0) {
+            map_index.remove(val);
+        }
+        return true;
+    }
+
+    /**
+     * Get a random element from the collection.
+     */
+    public int getRandom() {
+        return nums_list.get((int) (nums_list.size() * Math.random()));
+    }
+
+    public String show() {
+        String res = "";
+
+        for (int it : nums_list) {
+            res += it + "|";
+        }
+        res += "\n";
+        for (int it : map_index.keySet()) {
+            res += "val=" + it + " index: ";
+            for (int index : map_index.get(it)) {
+                res += index + " ";
+            }
+            res += "\n";
+        }
+        return res;
+    }
+}

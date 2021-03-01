@@ -1,0 +1,17 @@
+class Solution {
+    public boolean increasingTriplet(int[] nums) {
+        if (nums.length < 3)
+            return false;
+        int last = Integer.MAX_VALUE;
+        int lastButOne = Integer.MAX_VALUE;
+        for (int it : nums) {
+            if (it <= last)
+                last = it;
+            else if (it <= lastButOne)
+                lastButOne = it;
+            else
+                return true;
+        }
+        return false;
+    }
+}

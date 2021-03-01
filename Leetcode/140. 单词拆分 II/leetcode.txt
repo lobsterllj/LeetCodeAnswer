@@ -1,0 +1,68 @@
+class Solution {
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        Solution aa = new Solution();
+        List<String> res=new LinkedList<>();
+        List<String> cache=new LinkedList<>();
+        int index_s=0;
+        int last_index_S=0;
+        if(aa.compare(s, wordDict))
+        {
+        aa.wordBrea(s,wordDict,res,cache,index_s,last_index_S);
+        }
+        return res;
+
+    }
+    public static String listToString(List list, char separator) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < list.size(); i++) {
+            sb.append(list.get(i));
+            if (i < list.size() - 1) {
+                sb.append(separator);
+            }
+        }
+        return sb.toString();
+    }
+
+    public void wordBrea(String s, List<String> wordDict, List<String> res, List<String> cache, int index_s, int last_index_S) {
+
+        if (index_s == s.length()) {
+            cache = new LinkedList<>(cache);
+            String aa=listToString(cache,' ');
+            res.add(aa);
+        } else {
+            for (int i = 1; i < s.length() + 1; ++i) {
+                for (int j = index_s; j < i; ++j) {
+                    if(wordDict.contains(s.substring(j, i)))
+                    {
+                        if(last_index_S==j)
+                        {
+                            cache.add(s.substring(j, i));
+                            wordBrea(s,wordDict,res,cache,i,i);
+                            cache.remove(cache.size() - 1);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public boolean compare(String s, List<String> wordDict) {
+        boolean[] res = new boolean[s.length() + 1];
+        res[0] = true;
+
+        for (int i = 1; i < s.length() + 1; ++i) {
+            for (int j = 0; j < i; ++j) {
+                if (res[j] && wordDict.contains(s.substring(j, i))) {
+                    res[i] = true;
+                    //break;
+                }
+            }
+        }
+        for (int i = 0; i < res.length; ++i) {
+            System.out.println("res[" + i + "]:" + res[i]);
+
+        }
+        return res[s.length()];
+    }
+
+}

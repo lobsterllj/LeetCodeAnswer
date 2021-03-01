@@ -1,0 +1,56 @@
+class Solution {
+    int len;
+    public List<String> restoreIpAddresses(String s) {
+        len = s.length();
+        List<String> res = new ArrayList<>();
+        if (len < 4 || len > 12)
+            return res;
+        StringBuilder cache = new StringBuilder();
+        backTracking(res, s, cache, 0, 3);
+        return res;
+    }
+
+    public void backTracking(List<String> res, String s, StringBuilder cache, int index, int cntP){
+        if (index >= len){
+            return;
+        }
+        if ((len - index) > (cntP + 1) * 3){
+            return;
+        }
+        if (cntP == 0){
+            if (index < len - 1 && s.charAt(index) == '0')
+                return;
+            String sub = s.substring(index, len);
+            int subInt = Integer.valueOf(sub);
+            if(subInt > 255){
+                return;
+            }
+            StringBuilder temp = new StringBuilder(cache);
+            temp.append(sub);
+            res.add(temp.toString());
+            return;
+        }
+
+        if (s.charAt(index) == '0'){
+            cache.append('0');
+            cache.append('.');
+            backTracking(res, s, cache, index + 1, cntP - 1);
+            cache.delete(cache.length() - 2, cache.length());
+            return;
+        }
+        
+        for (int i = index; i < len; ++i){
+            String sub = s.substring(index, i + 1);
+            int subInt = Integer.valueOf(sub);
+            if (subInt > 255){
+                break;
+            }
+
+            cache.append(sub);
+            cache.append('.');
+            backTracking(res, s, cache, i + 1, cntP - 1);
+            cache.delete(cache.length() - sub.length() - 1, cache.length());
+        }
+ 
+    }
+}

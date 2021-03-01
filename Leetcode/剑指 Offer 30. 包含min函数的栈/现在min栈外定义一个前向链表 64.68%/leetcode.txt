@@ -1,0 +1,52 @@
+class Node{
+    int val;
+    int min;
+    Node pre;
+    public Node(){
+        this.pre=null;
+    }
+}
+class MinStack {
+    Node lastOne;
+    /** initialize your data structure here. */
+    public MinStack() {
+        lastOne=null;
+    }
+    
+    public void push(int x) {
+        if(lastOne==null){
+            lastOne=new Node();
+            lastOne.val=x;
+            lastOne.min=x;
+            lastOne.pre=null;
+        }
+        else{
+            Node cache=lastOne;
+            lastOne=new Node();
+            lastOne.pre=cache;
+            lastOne.val=x;
+            lastOne.min=Math.min(cache.min,x);
+        }
+    }
+    
+    public void pop() {
+        lastOne=lastOne.pre;
+    }
+    
+    public int top() {
+        return lastOne.val;
+    }
+    
+    public int min() {
+        return lastOne.min;
+    }
+}
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack obj = new MinStack();
+ * obj.push(x);
+ * obj.pop();
+ * int param_3 = obj.top();
+ * int param_4 = obj.min();
+ */

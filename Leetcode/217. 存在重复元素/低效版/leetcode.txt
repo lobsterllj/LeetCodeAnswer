@@ -1,0 +1,19 @@
+class Solution {
+    public boolean containsDuplicate(int[] nums) {
+        Map<Integer, Integer> cnts = new HashMap();
+        Integer cache = 0;
+        for (int it : nums) {
+            if (cnts.containsKey(it)) {
+                cache = cnts.get(it) + 1;
+                cnts.put(it, cache);
+            } else {
+                cnts.put(it, 1);
+            }
+        }
+        for (int i : cnts.keySet()) {
+            if(cnts.get(i)>1)
+                return true;
+        }
+        return false;
+    }
+}

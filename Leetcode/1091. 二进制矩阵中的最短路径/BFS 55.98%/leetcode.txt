@@ -1,0 +1,47 @@
+class Solution {
+    public int shortestPathBinaryMatrix(int[][] grid) {
+        int Rows = grid.length;
+        int Cols = grid[0].length;
+
+        if (grid[0][0] == 1 || grid[Rows - 1][Cols - 1] == 1)
+            return -1;
+
+        int[][] dir = new int[8][2];
+        dir[0] = new int[]{0, 1};
+        dir[1] = new int[]{0, -1};
+        dir[2] = new int[]{1, 0};
+        dir[3] = new int[]{-1, 0};
+        dir[4] = new int[]{1, 1};
+        dir[5] = new int[]{1, -1};
+        dir[6] = new int[]{-1, 1};
+        dir[7] = new int[]{-1, -1};
+
+
+        boolean[][] visited = new boolean[Rows][Cols];
+        Deque<int[]> deque = new ArrayDeque<>();
+        deque.addLast(new int[]{0, 0});
+        visited[0][0] = true;
+
+        int res = 1;
+        while (!deque.isEmpty()){
+            for(int i = deque.size(); i > 0; --i){
+                int[] cache = deque.pollFirst();
+                int r0 = cache[0];
+                int c0 = cache[1];
+                if (r0 == Rows - 1 && c0 == Cols - 1)
+                    return res;
+                for (int[] d : dir){
+                    int r = r0 + d[0];
+                    int c = c0 + d[1];
+                    if (r >= 0 && r < Rows && c >=0 && c < Cols && grid[r][c] == 0 && !visited[r][c]){
+                        deque.addLast(new int[]{r, c});
+                        visited[r][c] = true;
+                    }
+                }
+            }
+            res++;        
+        }
+        return -1;
+
+    }
+}

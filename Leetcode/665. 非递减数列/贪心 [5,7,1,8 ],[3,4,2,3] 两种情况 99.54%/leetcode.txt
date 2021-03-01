@@ -1,0 +1,28 @@
+class Solution {
+    public boolean checkPossibility(int[] nums) {
+        int len = nums.length;
+        boolean change = false;
+        if (len < 3)
+            return true;
+
+        for (int i = 1; i < len - 1; ++i){
+            if (nums[i] < nums[i - 1]){
+                if (change)
+                    return false;
+                if (nums[i - 1] > nums[i + 1]){
+                    //0,4,2,3
+                    nums[i - 1] = nums[i];
+                    if (i - 2 >= 0 && nums[i - 1] < nums[i - 2])
+                        return false;
+                }else{
+                    //5,7,1,8
+                    nums[i] = nums[i - 1];
+                }
+                change = true;
+            }
+        }
+        if (change && nums[len - 1] < nums[len - 2])
+            return false;
+        return true;
+    }
+}
