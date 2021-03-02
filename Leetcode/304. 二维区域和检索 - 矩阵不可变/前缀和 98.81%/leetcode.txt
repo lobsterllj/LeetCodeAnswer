@@ -1,0 +1,56 @@
+class NumMatrix {
+    int[][] sum;
+    int[][] matrix;
+    int Rows;
+    int Cols;
+    boolean nullFlag = false;
+    public NumMatrix(int[][] matrix) {
+        this.matrix = matrix;
+        Rows = matrix.length;
+        if (Rows == 0){
+            nullFlag = true;
+        }
+        else{
+            Cols = matrix[0].length;
+            if(Cols == 0){
+                nullFlag = true;
+            }else{
+                sum = new int[Rows][Cols];
+                for (int col = 0; col < Cols; ++col){
+                    sum[0][col] = matrix[0][col];
+                }
+                for (int row = 1; row < Rows; ++row){
+                    for (int col = 0; col < Cols; ++col){
+                        sum[row][col] = sum[row - 1][col] + matrix[row][col];
+                    }
+                }   
+                for (int col = 1; col < Cols; ++col){
+                    for (int row = 0; row < Rows; ++row){
+                        sum[row][col] += sum[row][col - 1];
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    public int sumRegion(int row1, int col1, int row2, int col2) {
+        if (nullFlag)
+            return 0;
+        if (row1 == row2 && col1 == col2)
+            return matrix[row2][col2];
+        if (row1 == 0 && col1 == 0)
+            return sum[row2][col2];
+        if (row1 == 0)
+            return sum[row2][col2] - sum[row2][col1 - 1];
+        if (col1 == 0)
+            return sum[row2][col2] - sum[row1 - 1][col2];
+        return sum[row2][col2] - sum[row2][col1 - 1] - sum[row1 - 1][col2] + sum[row1 - 1][col1 - 1];
+    }
+}
+
+/**
+ * Your NumMatrix object will be instantiated and called as such:
+ * NumMatrix obj = new NumMatrix(matrix);
+ * int param_1 = obj.sumRegion(row1,col1,row2,col2);
+ */
