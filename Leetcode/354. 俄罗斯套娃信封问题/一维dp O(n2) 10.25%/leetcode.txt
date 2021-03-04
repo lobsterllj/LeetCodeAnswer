@@ -1,0 +1,32 @@
+class Solution {
+    int len;
+    public int maxEnvelopes(int[][] envelopes) {
+        len = envelopes.length;
+        if (len < 2)
+            return len;
+        int res = 0;
+        Arrays.sort(envelopes,(int[] e1, int[] e2)->{
+            if (e1[0] == e2[0])
+                return e1[1] - e2[1];
+            else
+                return e1[0] - e2[0];
+        });
+        int[] dp = new int[len];
+        for (int i = 0; i < len; ++i){
+            dp[i] = 1;
+        }
+        for (int i = 1; i < len; ++i){
+            int index = 0;
+            while (index < i){
+                if (envelopes[i][0] > envelopes[index][0] && envelopes[i][1] > envelopes[index][1]){
+                    dp[i] = Math.max(dp[i], dp[index] + 1);
+                }
+                index++;
+            }
+            res = Math.max(res, dp[i]);
+        }
+        return res;
+
+    }
+
+}
