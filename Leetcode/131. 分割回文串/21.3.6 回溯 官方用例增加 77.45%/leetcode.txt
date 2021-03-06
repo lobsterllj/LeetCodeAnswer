@@ -1,0 +1,46 @@
+class Solution {
+    int len;
+    String str;
+    char[] chars;
+    public List<List<String>> partition(String s) {
+        List<List<String>> res = new ArrayList<>();
+        chars = s.toCharArray();
+        len = chars.length;
+        str = s;
+
+        if (len == 0)
+            return res;
+        List<String> cache = new ArrayList<>();
+
+        backTracking(res, cache, 0);
+        return res;
+    }
+
+    public void backTracking(List<List<String>> res, List<String> cache, int sta){
+        if (sta == len){
+            List<String> temp = new ArrayList<>(cache);
+            res.add(temp);
+            return;
+        }
+
+        for (int i = sta; i < len; ++i){
+            if (!isOuO(sta, i)){
+                continue;
+            }
+            cache.add(str.substring(sta, i + 1));
+            backTracking(res, cache, i + 1);
+            cache.remove(cache.size() - 1);
+        }
+    }
+
+    public boolean isOuO(int sta, int end){
+        while (sta < end){
+            if (chars[sta] != chars[end]){
+                return false;
+            }
+            sta++;
+            end--;
+        }
+        return true;
+    }
+}
