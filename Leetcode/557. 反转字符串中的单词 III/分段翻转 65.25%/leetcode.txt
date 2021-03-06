@@ -1,0 +1,37 @@
+class Solution {
+    public String reverseWords(String s) {
+        char[] chars = s.toCharArray();
+        int len = chars.length;
+        if (len < 2)
+            return s;
+        int sta = 0;
+        while (chars[sta] == ' '){
+            sta++;
+        }
+        for (int end = sta; end < len; ++end){
+            if (chars[end] == ' '){
+                reverse(chars, sta, end - 1);
+                sta = end + 1;
+            }
+            else if (end == len - 1){
+                reverse(chars, sta, end);
+                sta = end + 1;
+            }
+        }
+        StringBuilder res = new StringBuilder();
+        for (int i = 0; i < len; ++i){
+            res.append(chars[i]);
+        }
+        return res.toString();
+    }
+
+    public void reverse(char[] chars, int lf, int rt){
+        while (lf < rt){
+            char temp = chars[lf];
+            chars[lf] = chars[rt];
+            chars[rt] = temp;
+            lf++;
+            rt--;
+        }
+    }
+}
