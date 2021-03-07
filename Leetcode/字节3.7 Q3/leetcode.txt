@@ -1,0 +1,92 @@
+import java.util.*;
+
+class src {
+    public static void main(String[] args) {
+        src src = new src();
+        int[][] edge = new int[][]{
+                {1, 1, 2},
+                {2, 1, 3},
+                {2, 1, 4},
+                {1, 2, 3},
+        };
+        System.out.println(src.Question3(edge));
+    }
+
+    public int Question3(int[][] edges) {
+        int res = 0;
+        Map<Integer, Integer> edgeNum_indexNums = new HashMap<>();
+        int len = edges.length;
+        if (len < 2)
+            return 0;
+        int index = 0;
+        for (int i = 0; i < len; ++i) {
+            int temp_cache = edgeNum_indexNums.getOrDefault(edges[i][1], index++);
+            edgeNum_indexNums.put(edges[i][1], temp_cache);
+            int temp_cache1 = edgeNum_indexNums.getOrDefault(edges[i][2], index++);
+            edgeNum_indexNums.put(edges[i][2], temp_cache1);
+        }
+        UnionFind unionFind = new UnionFind(index);
+        for (int i = 0; i < len; ++i) {
+            if (edges[i][0] == 1)
+                unionFind.union(edgeNum_indexNums.get(edges[i][1]), edgeNum_indexNums.get(edges[i][2]));
+        }
+        for (int i = 0; i < len; ++i) {
+            if (edges[i][0] == 2) {
+                if (unionFind.isConnected(edgeNum_indexNums.get(edges[i][1]), edgeNum_indexNums.get(edges[i][2])))
+                    res++;
+            }
+        }
+        return res;
+    }
+
+    class UnionFind {
+        int[] fathers;
+        int[] size;
+        int groupNum;
+        int capacity;
+
+        public UnionFind(int n) {
+            groupNum = n;
+            capacity = n;
+            fathers = new int[n];
+            size = new int[n];
+            for (int i = 0; i < n; ++i) {
+                fathers[i] = i;
+                size[i] = 1;
+            }
+        }
+
+        public int find(int x) {
+            if (x != fathers[x])
+                fathers[x] = find(fathers[x]);
+            return fathers[x];
+        }
+
+        public void union(int x, int y) {
+            int rootX = find(x);
+            int rootY = find(y);
+            if (rootX == rootY)
+                return;
+            if (size[rootX] < size[rootY]) {
+                fathers[rootX] = rootY;
+                size[rootY] += size[rootX];
+            } else {
+                fathers[rootY] = rootX;
+                size[rootX] += size[rootY];
+            }
+            groupNum--;
+        }
+
+        public boolean isConnected(int x, int y) {
+            int rootX = find(x);
+            int rootY = find(y);
+            return rootX == rootY;
+        }
+
+
+    }
+}
+
+
+
+
