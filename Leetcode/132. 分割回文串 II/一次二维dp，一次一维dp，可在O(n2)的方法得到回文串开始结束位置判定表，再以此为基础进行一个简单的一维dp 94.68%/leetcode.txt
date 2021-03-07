@@ -1,0 +1,62 @@
+class Solution {
+    char[] chars;
+    int len;
+    public int minCut(String s) {
+        chars = s.toCharArray();
+        len = chars.length;
+        if (len < 2)
+            return 0;
+        
+        //[i, j]是否为回文串
+        boolean[][] dpOuO = new boolean[len][len];
+        //[0, i]划分为只由回文区间构成的子区间集合后，包含的子区间的最少个数
+        int dp[] = new int[len];
+        dp[0] = 1;
+        //标记,长度为奇数的回文子区间
+        for (int i = 0; i < len; ++i){
+            dpOuO[i][i] = true;
+            int lf = i - 1;
+            int rt = i + 1;
+            while (lf >= 0 && rt < len && chars[lf] == chars[rt]){
+                dpOuO[lf][rt] = true;
+                lf--;
+                rt++;
+            }
+        }
+        //标记,长度为偶数的回文子区间 (注意while的位置)
+        for (int i = 0; i < len - 1; ++i){
+            if (chars[i] == chars[i + 1]){
+                dpOuO[i][i + 1] = true;
+                int lf = i - 1;
+                int rt = i + 2;
+                while (lf >= 0 && rt < len && chars[lf] == chars[rt]){
+                    dpOuO[lf][rt] = true;
+                    lf--;
+                    rt++;
+                }
+            }
+        }
+        // for (int i = 0; i < len; ++i){
+        //     for (int j = 0; j < len; ++j){
+        //         System.out.print(dpOuO[i][j] + " ");
+        //     }
+        //     System.out.println();
+        // }
+        for (int i = 1; i < len; ++i){
+            if (dpOuO[0][i]){
+                dp[i] = 1;
+            } else{
+                int min = Integer.MAX_VALUE;
+                for (int j = 1; j <= i; ++j){
+                    if (dpOuO[j][i]){
+                        min = Math.min(min, dp[j - 1]);
+                    }
+                }
+                dp[i] = min + 1;
+            }   
+        }
+
+        return dp[len - 1] - 1;
+    }
+
+}
