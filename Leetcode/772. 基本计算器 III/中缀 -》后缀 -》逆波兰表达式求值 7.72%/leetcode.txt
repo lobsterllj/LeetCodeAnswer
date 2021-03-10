@@ -1,0 +1,123 @@
+class Solution {
+    Map<String, Integer> priority;
+    
+
+    public int calculate(String s) {
+        priority = new HashMap<>();
+        priority.put(")", 3);
+        priority.put("*", 2);
+        priority.put("/", 2);
+        priority.put("+", 1);
+        priority.put("-", 1);
+        priority.put("(", 0);
+
+        s = s.replaceAll(" ", "");   // 去除空格
+        List<String> infixList = sToinfix(s);
+        // System.out.println(infixList);
+        List<String> suffix = sTosuffix(infixList);
+        // System.out.println(suffix);
+
+        return reversePolishNotation(suffix);
+    }
+
+    public int reversePolishNotation(List<String> suffix){
+        Deque<String> cache = new ArrayDeque<>();
+        for (int i = 0; i < suffix.size(); ++i){
+            String str = suffix.get(i);
+            if (isOper(str)){
+                String s2 = cache.pollLast();
+                String s1 = cache.pollLast();
+                String r = cal(s1, str, s2);
+                cache.addLast(r);
+            } else{
+                cache.addLast(str);
+            }
+        }
+        return Integer.parseInt(cache.peekLast());
+    }
+
+    public String cal(String num1, String oper, String num2) {
+        Long result = 0l;
+        Long a = Long.parseLong(num1);
+        Long b = Long.parseLong(num2);
+        switch (oper) {
+            case "+":
+                result = a + b;
+                break;
+            case "-":
+                result = a - b;
+                break;
+            case "*":
+                result = a * b;
+                break;
+            case "/":
+                result = a / b;
+                break;
+        }
+        return String.valueOf(result);
+    }
+
+    public List<String> sTosuffix(List<String> infixList) {
+        List<String> suffix = new ArrayList<>();
+        Deque<String> oper = new ArrayDeque<>();
+        Deque<String> nums = new ArrayDeque<>();
+        for (int i = 0; i< infixList.size(); ++i){
+            String infixStr = infixList.get(i);
+            if (isOper(infixStr)){
+                if (oper.isEmpty() || infixStr.equals("(")){
+                    oper.addLast(infixStr);
+                } else{
+                    if (")".equals(infixStr)){
+                        while (!oper.peekLast().equals("(")){
+                            nums.addLast(oper.pollLast());
+                        }
+                        oper.pollLast();
+                    } else{
+                        while (!oper.isEmpty() && priority.get(oper.peekLast()) >= priority.get(infixStr)){
+                            nums.addLast(oper.pollLast());                            
+                        }
+                        oper.addLast(infixStr);
+                    }
+                }
+            } else{
+                nums.addLast(infixStr);
+            }
+        }
+        while (!oper.isEmpty()){
+            nums.addLast(oper.pollLast());
+        }
+        while (!nums.isEmpty()){
+            suffix.add(nums.pollFirst());
+        }
+        return suffix;
+    }
+
+    public List<String> sToinfix(String s) {
+        char[] chars = s.toCharArray();
+        List<String> res = new ArrayList<>();
+        int len = chars.length;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < len; ++i){
+            if (isDigit(chars[i])){
+                sb.append(chars[i]);
+                if (i != len - 1 && isDigit(chars[i + 1])){
+                } else{
+                    res.add(sb.toString());
+                    sb = new StringBuilder();
+                }
+            } else{
+                res.add(chars[i] + "");
+            }
+        }
+        return res;
+    }
+
+    public boolean isDigit(char c) {
+        return c >= '0' && c <= '9';
+    }
+
+    public boolean isOper(String str) {
+        return "+".equals(str) || "-".equals(str) || "*".equals(str) || "/".equals(str) || "(".equals(str) || ")".equals(str);
+    }
+
+}
