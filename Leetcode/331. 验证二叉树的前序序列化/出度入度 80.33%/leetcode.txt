@@ -1,0 +1,26 @@
+class Solution {
+    public boolean isValidSerialization(String preorder) {
+        if (preorder.equals(""))
+            return false;
+        if (preorder.equals("#"))
+            return true;
+        String[] strs = preorder.split(",");
+        int len = strs.length;
+        if (strs[0].equals("#")){
+            return false;
+        }
+        int degree = 2;
+        for (int i = 1; i < len; ++i){
+            if (strs[i].equals("#")){
+                degree --;
+            } else{
+                degree ++;
+            }
+            if (i != len - 1 && degree <= 0){
+                return false;
+            }
+        }
+
+        return degree == 0;
+    }
+}
