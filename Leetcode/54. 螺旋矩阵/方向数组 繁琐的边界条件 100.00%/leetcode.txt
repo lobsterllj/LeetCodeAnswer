@@ -1,0 +1,68 @@
+class Solution {
+    int[][] dir = new int[][]{
+        {0, 1},//右
+        {-1, 0},//下
+        {0, -1},//左
+        {1, 0},//上
+    };
+    public List<Integer> spiralOrder(int[][] matrix) {
+        int m = matrix.length;
+        int n = matrix[0].length;
+        int nums = m * n;
+
+        //[leftBorder, rightBorder] 允许的水平方向上的取值范围
+        int leftBorder = 0;
+        int rightBorder = n - 1;
+
+        //[topBorder, bottomBorder] 允许的竖直方向上的取值范围
+        int topBorder = 0;
+        int bottomBorder = m - 1;
+
+        List<Integer> res = new ArrayList<>();
+        int index = 0;
+        int direction = 0;
+
+        //[row, col] 当前位置
+        int row = 0;
+        int col = 0;
+
+        while (index < nums){
+            // System.out.println(res);
+            if (direction == 0){
+                while (col <= rightBorder){
+                    res.add(matrix[row][col++]);
+                    index++;
+                }
+                col--;
+                row++;
+                topBorder++;
+            }else if (direction == 1){
+                while (row <= bottomBorder){
+                    res.add(matrix[row++][col]);
+                    index++;
+                }
+                row--;
+                col--;
+                rightBorder--;
+            }else if (direction == 2){
+                while (col >= leftBorder){
+                    res.add(matrix[row][col--]);
+                    index++;
+                }
+                col++;
+                row--;
+                bottomBorder--;
+            }else {
+                while (row >= topBorder){
+                    res.add(matrix[row--][col]);
+                    index++;
+                }
+                row++;
+                col++;
+                leftBorder++;
+            }
+            direction = (direction + 1) % 4;
+        }
+        return res;
+    }
+}

@@ -1,0 +1,53 @@
+class Solution {
+    int[][] dir = new int[][]{
+        {0, 1},
+        {1, 0},
+        {0, -1},
+        {-1, 0}
+    };
+    public int[][] generateMatrix(int n) {
+        int[][] res = new int[n][n];
+        int index = 1;
+        int d = 0;
+        int top = 0;
+        int left = 0;
+        int bottom = n - 1;
+        int right = n - 1;
+        int row = 0;
+        int col = 0;  
+        while (index <= n * n){
+            if (d == 0 && top <= bottom){
+                while (col <= right){
+                    res[row][col++] = index++;
+                }
+                col--;
+                row++;
+                top++;
+            }else if (d == 1 && left <= right){
+                while (row <= bottom){
+                    res[row++][col] = index++;
+                }
+                row--;
+                col--;
+                right--;
+            }else if (d == 2 && top <= bottom){
+                while (col >= left){
+                    res[row][col--] = index++;
+                }
+                col++;
+                row--;
+                bottom--;
+            }else if (d == 3 && left <= right){
+                while (row >= top){
+                    res[row--][col] = index++;
+                }
+                row++;
+                col++;
+                left++;
+            }
+            d = (d + 1) % 4;
+        }
+        return res;
+
+    }
+}
