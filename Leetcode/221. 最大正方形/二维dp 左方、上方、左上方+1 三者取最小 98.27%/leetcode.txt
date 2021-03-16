@@ -1,0 +1,59 @@
+class Solution {
+    public int maximalSquare(char[][] matrix) {
+        int Rows = matrix.length;
+        int Cols = matrix[0].length;
+        //dp: 以当前元素为右下角可以组成最大正方形的边长
+        int[][] dp = new int[Rows][Cols];
+        //upper: 以当前元素为结尾，当前元素上方至当前元素共有多少个连续的1
+        int[][] upper = new int[Rows][Cols];
+        //left: 以当前元素为结尾，当前元素左方至当前元素共有多少个连续的1
+        int[][] left = new int[Rows][Cols];
+        int res = 0;
+        for (int row = 0; row < Rows; ++row){
+            int cnt = matrix[row][0] - '0'; 
+            dp[row][0] = cnt;
+            left[row][0] = cnt;
+            if (cnt > 0)
+                res = 1;
+        }
+        for (int col = 0; col < Cols; ++col){
+            int cnt = matrix[0][col] - '0';
+            dp[0][col] = cnt;
+            upper[0][col] = cnt;
+            if (cnt > 0)
+                res = 1;
+        }
+        for (int row = 1; row < Rows; ++row){
+            for (int col = 0; col < Cols; ++col){
+                if (matrix[row][col] == '1'){
+                    upper[row][col] = upper[row - 1][col] + 1;
+                }
+            }
+        }
+            
+        for (int col = 1; col < Cols; ++col){
+            for (int row = 0; row < Rows; ++row){
+                if (matrix[row][col] == '1'){
+                    left[row][col] = left[row][col - 1] + 1;
+                }
+            }
+        }
+
+        for (int row = 1; row < Rows; ++row){
+            for (int col = 1; col < Cols; ++col){
+                if (matrix[row][col] == '1'){
+                    int lefttop = dp[row - 1][col - 1]  + 1;
+                    int top = upper[row][col];
+                    int lt = left[row][col];
+                    int newcnt = Math.min(lefttop, top);
+                    newcnt = Math.min(lt, newcnt);
+                    dp[row][col] = newcnt;
+                    res = Math.max(res, dp[row][col]);
+                }
+            }
+        }
+
+
+        return res * res;
+    }
+}
