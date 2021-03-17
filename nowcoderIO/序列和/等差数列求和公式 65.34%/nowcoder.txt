@@ -1,0 +1,25 @@
+import java.util.Scanner;
+public class Main{
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int N = sc.nextInt();
+        int L = sc.nextInt();
+        for (int i = L; i < 101; ++i){
+            int cache = (2 * N + i - (i * i));
+            if (cache % (2 * i) == 0){
+                if (cache < 0){
+                    System.out.println("No");
+                    return;
+                }
+                int a = cache / (2 * i);
+                for (int j = 0; j < i - 1; ++j){
+                    System.out.print(a + " ");
+                    ++a;
+                }
+                System.out.print(a);
+                return;
+            }
+        }
+        System.out.println("No");
+    }
+}
