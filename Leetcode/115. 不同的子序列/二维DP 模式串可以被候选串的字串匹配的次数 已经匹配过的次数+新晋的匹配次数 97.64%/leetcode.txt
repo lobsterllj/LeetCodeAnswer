@@ -1,0 +1,43 @@
+class Solution {
+    public int numDistinct(String s, String t) {
+        char[] tChar = t.toCharArray();
+        int lt = tChar.length;
+        if (lt == 0)
+            return 1;
+
+        char[] sChar = s.toCharArray();
+        int ls = sChar.length;
+        if (ls < lt)
+            return 0;
+
+        int[][] dp = new int[lt + 1][ls + 1];
+        //dp[i][j]: t的[0, i] 可以被 s的[0, j] 匹配的次数
+        for (int j = 0; j <= ls; ++j){
+            dp[0][j] = 1;
+        }
+        for (int i = 1; i <= lt; ++i){
+            for (int j = 1; j <= ls; ++j) {
+                if (tChar[i - 1] == sChar[j - 1]) {
+                    /*
+                        例如 bag 可以被 babgba 匹配1次
+                        ba 可以被 babgba 匹配4 次
+                        那么 bag 可以被 babgbag (babgba)+g 匹配4次 (babgba)匹配1次 所以变成 1+4 = 5次
+                    */
+                    dp[i][j] = dp[i - 1][j - 1] + dp[i][j - 1];
+                } else {
+                    dp[i][j] = dp[i][j - 1];
+                }
+            }
+        }
+
+
+        // for (int i = 0; i <= lt; ++i){
+        //     for (int j = 0; j <= ls; ++j) {
+        //         System.out.print(dp[i][j] + " ");
+        //     }
+        //     System.out.println();
+        // }
+
+        return dp[lt][ls];
+    }
+}
