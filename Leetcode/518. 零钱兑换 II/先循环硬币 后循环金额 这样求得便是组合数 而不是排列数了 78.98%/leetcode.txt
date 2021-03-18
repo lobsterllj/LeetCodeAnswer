@@ -1,0 +1,24 @@
+class Solution {
+    public int change(int amount, int[] coins) {
+        /*
+        dp三问
+        a.定义子问题，b. 定义状态数组，c. 定义状态转移方程。
+        a.子问题是，对于硬币从0到k，我们必须使用第k个硬币的时候，当前金额的组合数
+        b.dp[i]表示的是对于第k个硬币能凑的组合数
+        c.状态转移方程如下dp[i] = dp[i] + dp[i - coin];
+        */
+        int[] dp = new int[amount + 1];
+        dp[0] = 1;
+        for (int coin : coins){//先枚举硬币 看看到价值小于等于coin的硬币们，共能对不同的金额提供多少种组合数
+            for (int i = 0; i <= amount; ++i){//再枚举金额
+                if (i - coin >= 0){
+                    dp[i] += dp[i - coin];
+                }
+            }
+        }
+        // for (int i = 0; i <= amount; ++i){
+        //     System.out.println(i + " " + dp[i]);
+        // }
+        return dp[amount];
+    }
+}

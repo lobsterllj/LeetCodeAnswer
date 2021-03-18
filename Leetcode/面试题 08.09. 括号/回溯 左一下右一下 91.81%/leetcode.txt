@@ -1,0 +1,27 @@
+class Solution {
+    int n;
+    public List<String> generateParenthesis(int n) {
+        this.n = n;
+        Set<String> res = new HashSet();
+        StringBuilder cache = new StringBuilder();
+        backTracking(res, cache, 0, 0);
+        List<String> ret = new ArrayList<>(res);
+        return ret;
+    }
+    public void backTracking(Set<String> res, StringBuilder cache, int left, int right) {
+        if (left > n || right > n || right > left) {
+            return;
+        }
+        if (left + right == 2 * n) {
+            res.add(cache.toString());
+            return;
+        }
+        cache.append('(');
+        backTracking(res, cache, left + 1, right);
+        cache.deleteCharAt(cache.length() - 1);
+
+        cache.append(')');
+        backTracking(res, cache, left, right + 1);
+        cache.deleteCharAt(cache.length() - 1);
+    }
+}

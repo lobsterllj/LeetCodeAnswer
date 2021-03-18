@@ -1,0 +1,31 @@
+class Solution {
+    int len;
+    char[] chars;
+    public int longestValidParentheses(String s) {
+        chars = s.toCharArray();
+        len = chars.length;
+        int res = 0;
+        if (len < 2)
+            return 0;
+        //记录上一次不匹配的位置 初始为 -1
+        Deque<Integer> stack = new ArrayDeque();
+        stack.addLast(-1);
+        
+        for (int i = 0; i < len; ++i) {
+            if (chars[i] == '(') {
+                stack.addLast(i);
+            } else {
+                stack.pollLast();
+                //弹出上一个'('或者不匹配的元素
+                if (stack.isEmpty()){
+                    //前方所有元素均被匹配或者从当前位置开始不匹配，此时的i已成为最近的一个不匹配的点
+                    stack.addLast(i);
+                } else {
+                    res = Math.max(res, i - stack.peekLast());
+                }
+
+            }
+        }
+        return res;
+    }
+}
