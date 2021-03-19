@@ -1,0 +1,105 @@
+class Solution {
+    public int numBusesToDestination(int[][] routes, int source, int target) {
+        // 车:route 站:station
+        // 车与站 + 站与车 = 车与车
+        /*
+        车的数量m < 500
+        站的数量n < 10^5
+        总的时间复杂度 O(n*(m^2)) 
+        新建对象最好不要做参数 getOrDefault(i, new ..)比较耗时
+        */
+
+        Set<Integer> source_route = new HashSet();
+        Set<Integer> target_route = new HashSet();
+
+        Map<Integer, Set<Integer>> route_sta = new HashMap();
+        Map<Integer, Set<Integer>> sta_route = new HashMap();
+        Map<Integer, Set<Integer>> route_route = new HashMap();
+
+        // 车的数量 = route.length 可以直接初始化 车站 车车
+        for (int route = 0; route < routes.length; ++route) {
+            route_sta.put(route, new HashSet());
+            route_route.put(route, new HashSet());
+        }
+
+        // route_sta
+        for (int route = 0; route < routes.length; ++route) {
+            for (int station = 0; station < routes[route].length; ++station) {
+                route_sta.get(route).add(routes[route][station]);
+                if (routes[route][station] == source){
+                    source_route.add(route);
+                }
+                if (routes[route][station] == target){
+                    target_route.add(route);
+                }
+            }
+        }
+        // System.out.println(route_sta);
+
+        // sta_route
+        for (int route = 0; route < routes.length; ++route) {
+            for (int station = 0; station < routes[route].length; ++station) {
+                if (!sta_route.containsKey(routes[route][station])){
+                    sta_route.put(routes[route][station], new HashSet());
+                }
+                sta_route.get(routes[route][station]).add(route);
+            }
+        }
+        // System.out.println(sta_route);
+
+        // route_route
+        /*
+        这里由于车站 n 远大于 m
+        故外层循环 n 一次，内层双循环m
+        */
+        //对于每一个车站
+        for (int sta : sta_route.keySet()) {
+            //对于该车站包含的每一个车,都与该车站的其他车相邻
+            for (int route : sta_route.get(sta)){
+                Set rrSet = route_route.get(route);
+                for (int rs : sta_route.get(sta)){
+                    if (rs == route)
+                        continue;
+                    rrSet.add(rs);
+                }
+            }
+        }
+        // System.out.println(route_route);
+
+        if (source == target){
+            if (sta_route.containsKey(source))
+                return 0;
+            else
+                return -1;
+        }
+
+        Set<Integer> visited = new HashSet();
+        Deque<Integer> deque = new ArrayDeque();
+        for (int it : source_route){
+            deque.addLast(it);
+            visited.add(it);
+        }
+        int res = 0;
+        while (!deque.isEmpty()){
+            res++;
+            // System.out.println(deque);
+            for (int j = deque.size(); j > 0; --j){
+                int temp = deque.pollFirst();
+                // System.out.println(visited);
+                if (target_route.contains(temp)) {
+                    return res;
+                }
+                
+                for (int it : route_route.get(temp)){
+                    if (!visited.contains(it)){
+                        deque.addLast(it);
+                        visited.add(it);
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
+
+}
