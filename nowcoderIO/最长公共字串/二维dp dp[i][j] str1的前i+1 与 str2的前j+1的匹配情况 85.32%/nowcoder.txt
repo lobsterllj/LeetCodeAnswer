@@ -1,0 +1,43 @@
+import java.util.*;
+
+
+public class Solution {
+    /**
+     * longest common substring
+     * @param str1 string字符串 the string
+     * @param str2 string字符串 the string
+     * @return string字符串
+     */
+    public String LCS(String str1, String str2) {
+        // write code here
+        char[] chars1 = str1.toCharArray();
+        char[] chars2 = str2.toCharArray();
+        int len1 = chars1.length;
+        int len2 = chars2.length;
+        int[][] dp = new int[len1][len2];
+        int max = 0;
+        int index = 0;
+        //dp[i][j]: str1 [0, i] 与 str2 [0, j] 匹配的最大长度
+        for (int i = 0; i < len1; ++i) {
+            for (int j = 0; j < len2; ++j) {
+                if (chars1[i] == chars2[j]) {
+                    if (i > 0 && j > 0) {
+                        dp[i][j] = dp[i - 1][j - 1] + 1;
+                        if (max < dp[i][j]) {
+                            max = dp[i][j];
+                            index = i;
+                        }
+                    } else {
+                        dp[i][j] = 1;
+                    }
+                }
+            }
+        }
+
+        if (max == 0) {
+            return "";
+        } else {
+            return str1.substring(index - max + 1, index + 1);
+        }
+    }
+}

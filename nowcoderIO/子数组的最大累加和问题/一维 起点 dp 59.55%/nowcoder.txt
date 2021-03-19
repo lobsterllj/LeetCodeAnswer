@@ -1,0 +1,26 @@
+import java.util.*;
+
+
+public class Solution {
+    /**
+     * max sum of the subarray
+     * @param arr int整型一维数组 the array
+     * @return int整型
+     */
+    public int maxsumofSubarray (int[] arr) {
+        int len = arr.length;
+        int[] dp = new int[len];
+        dp[0] = arr[0];
+        int res = arr[0];
+        for (int i = 1; i < len; ++i) {
+            if (dp[i - 1] < 0){
+                dp[i] = arr[i];
+            } else {
+                dp[i] = dp[i - 1] + arr[i];
+            }
+            res = Math.max(res, dp[i]);
+        }
+        return res;
+        // write code here
+    }
+}
