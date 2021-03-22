@@ -1,0 +1,39 @@
+class Solution {
+    public int longestCommonSubsequence(String text1, String text2) {
+        char[] c1 = text1.toCharArray();
+        int len1 = c1.length;
+        char[] c2 = text2.toCharArray();
+        int len2 = c2.length;
+        int[][] dp = new int[len1][len2];
+
+        for (int i = 0; i < len1; ++i) {
+            if (c1[i] == c2[0]){
+                while (i < len1) {
+                    dp[i++][0] = 1;
+                }
+            }
+        }
+
+        for (int j = 0; j < len2; ++j) {
+            if (c1[0] == c2[j]){
+                while (j < len2) {
+                    dp[0][j++] = 1;
+                }
+            }
+        }
+
+        for (int i = 1; i < len1; ++i) {
+            for (int j = 1; j < len2; ++j) {
+                if (c1[i] != c2[j]) {
+                    //abcd 与 ac 此时 d != c ,故比较 abc 与 ac 和 abcd 与 a 的匹配情况
+                    dp[i][j] = Math.max(dp[i][j - 1], dp[i - 1][j]);
+                } else {
+                    //abc 与 ac 此时 c != c ,故比较 ab 与 a 的匹配情况
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                }
+            }
+        }
+
+        return dp[len1 - 1][len2 - 1];
+    }
+}

@@ -1,0 +1,3 @@
+
+# Write your MySQL query statement below
+select p.FirstName, p.LastName from Person p left join a.City, a.State from Address a on p.PersonId = a.PersonId;
