@@ -1,0 +1,41 @@
+class Solution {
+    public boolean find132pattern(int[] nums) {
+        int len = nums.length;
+        if (len < 3) {
+            return false;
+        }
+        int[] min = new int[len];
+        min[0] = nums[0];
+        // min[i] nums [0, i] 中最小值 用于找1
+        for (int i = 1; i < len; ++i) {
+            min[i] = Math.min(min[i - 1], nums[i]);
+        }
+        Deque<Integer> deque = new ArrayDeque();
+        // 维护一个从后往前遍历的单调递减栈 用于找2
+        for (int i = len - 1; i > -1; --i) {
+            // System.out.println(i+"  "+deque);
+            int cur = nums[i];
+            if (cur > min[i]){
+                // 可能为所求的3
+                if (deque.isEmpty()){
+                    deque.add(cur);
+                    continue;
+                }
+                if (cur < deque.peekLast()) {
+                    deque.add(cur);
+                } else if(cur > deque.peekLast()) {
+                    while (!deque.isEmpty() && deque.peekLast() <= min[i]){
+                        // 把所有不可能为2的直接出栈
+                        deque.pollLast();
+                    }
+                    if (!deque.isEmpty()){
+                        // 存在可能为2的值
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+}
