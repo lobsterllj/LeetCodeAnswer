@@ -1,0 +1,14 @@
+# Write your MySQL query statement below
+SELECT d.Name AS Department, Employee, Salary FROM(
+    SELECT e.Name AS Employee, e.Salary, e.DepartmentId FROM(
+        SELECT DepartmentId, Name, Salary, dense_rank() over(
+            PARTITION BY DepartmentId ORDER BY Salary DESC
+            -- 按照不同的DepartmentId分别降序排名
+        ) as rankn FROM Employee
+        -- 给不同的工资水平编号 dense_rank() eg: 90 90 80 对应 1 1 2
+    )e WHERE e.rankn < 4
+    -- 每一个子表最好都取一个别名
+)AS e1 JOIN Department AS d ON e1.DepartmentId = d.Id
+
+
+-- SELECT * FROM(SELECT * FROM(SELECT * FROM Employee AS A1) AS A2) AS A3
