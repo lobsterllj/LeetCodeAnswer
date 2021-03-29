@@ -1,0 +1,35 @@
+class Solution {
+    public String decodeString(String s) {
+        char[] cs = s.toCharArray();
+        int len = cs.length;
+        Deque<Integer> numsDeque = new LinkedList();
+        Deque<String> strsDeque = new LinkedList();
+        StringBuilder res = new StringBuilder();
+        int num = 0;
+        for (int i = 0; i < len; ++i) {
+            if (cs[i] >= '0' && cs[i] <= '9') {
+                num = 10 * num + (cs[i] - '0');
+            } else if (cs[i] >= 'a' && cs[i] <= 'z') {
+                res.append(cs[i]);
+            } else if (cs[i] == '[') {
+                numsDeque.addLast(num);
+                //这里记录的是将来 res 保存的string, 而不是同期入栈strsDeque的字符串的循环次数
+                strsDeque.addLast(res.toString());
+                res = new StringBuilder();
+                num = 0;
+            } else if (cs[i] == ']') {
+                int cnt = numsDeque.pollLast();
+                String str = res.toString();
+                while (cnt > 1) {
+                    res.append(str);
+                    cnt--;
+                }
+                StringBuilder sb = new StringBuilder();
+                sb.append(strsDeque.pollLast());
+                sb.append(res.toString());
+                res = new StringBuilder(sb);
+            }
+        }
+        return res.toString();
+    }
+}
