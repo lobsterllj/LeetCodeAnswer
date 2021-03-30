@@ -1,0 +1,48 @@
+class FooBar {
+    private int n;
+    private boolean flag; 
+    private int cnt_f;
+    private int cnt_b;
+
+    public FooBar(int n) {
+        this.n = n;
+        this.flag = true;
+        cnt_f = 0;
+        cnt_b = 0;
+    }
+
+    public void foo(Runnable printFoo) throws InterruptedException {
+        while (cnt_f < n) {
+            synchronized(this) {
+                while (!flag) {
+                    this.wait();
+                }
+                // printFoo.run() outputs "foo". Do not change or remove this line.
+                this.notifyAll();
+                // notify()调用在synchronized块中的位置并不重要,因为根据定义,如果您仍在同步块中,那么您仍然保持锁定
+                printFoo.run();
+                cnt_f++;
+                flag = false;
+            }
+        }
+        // for (int i = 0; i < n; i++) {
+
+        // }
+    }
+
+    public void bar(Runnable printBar) throws InterruptedException {
+        while (cnt_b < n) {
+            synchronized(this) {
+                while (flag) {
+                    this.wait();
+                }
+                // printBar.run() outputs "bar". Do not change or remove this line.
+        	    printBar.run();
+                cnt_b++;
+                flag = true;
+                this.notifyAll();
+            }
+        }
+
+    }
+}

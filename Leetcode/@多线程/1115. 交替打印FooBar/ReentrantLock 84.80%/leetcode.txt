@@ -1,0 +1,58 @@
+class FooBar {
+    private int n;
+    private boolean flag; 
+    private int cnt_f;
+    private int cnt_b;
+    private Lock lock;
+    Condition f,b;
+    public FooBar(int n) {
+        this.n = n;
+        this.flag = true;
+        cnt_f = 0;
+        cnt_b = 0;
+        lock = new ReentrantLock();
+        f = lock.newCondition();
+        b = lock.newCondition();
+    }
+
+    public void foo(Runnable printFoo) throws InterruptedException {
+        while (cnt_f < n) {
+            lock.lock();
+            try {
+                while (!flag) {
+                    f.await();
+                }
+                printFoo.run();
+                flag = false;
+                cnt_f++;
+                b.signal();
+            } catch (Exception e) {
+
+            } finally {
+                lock.unlock();
+            }
+        }
+    }
+
+    public void bar(Runnable printBar) throws InterruptedException {
+        while (cnt_b < n) {
+            lock.lock();
+            try {
+                while (flag) {
+                    b.await();
+                }
+                // printBar.run() outputs "bar". Do not change or remove this line.
+        	    printBar.run();
+                flag = true;
+                cnt_b++;
+                f.signal();
+            } catch (Exception e) {
+
+            } finally {
+                lock.unlock();
+            }
+        }
+    }
+
+    
+}
