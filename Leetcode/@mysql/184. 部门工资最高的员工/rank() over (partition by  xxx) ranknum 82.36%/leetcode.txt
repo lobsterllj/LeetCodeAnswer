@@ -1,0 +1,7 @@
+# Write your MySQL query statement below
+SELECT Department, Employee, Salary FROM(
+SELECT d.Name as Department, e.Name as Employee, Salary, rank() over (
+PARTITION BY DepartmentId ORDER BY Salary DESC
+) ranknum 
+FROM Employee as e JOIN Department as d where e.DepartmentId = d.Id 
+)as t where t.ranknum = 1

@@ -1,0 +1,28 @@
+class Solution {
+    int[] nums;
+    int len;
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        this.nums = nums;
+        this.len = nums.length;
+        Arrays.sort(nums);
+        // 排序让nums内相等的元素相邻，便于去重
+        List<List<Integer>> res = new ArrayList();
+        List<Integer> cache = new ArrayList();
+        backTracking(res, cache, 0, false);
+        return res;
+    }
+    public void backTracking(List<List<Integer>> res, List<Integer> cache, int index, boolean choosePre) {
+        // 用choosePre记录上一位有没有被选中
+        if (index == len) {
+            res.add(new ArrayList(cache));
+            return;
+        }
+        backTracking(res, cache, index + 1, false);
+        if (index > 0 && nums[index] == nums[index - 1] && !choosePre)
+            return;
+        //上一位 index - 1 没被选中且当前位置 index 与上一位数值相等，则此位当然也不能被选中 
+        cache.add(nums[index]);
+        backTracking(res, cache, index + 1, true);
+        cache.remove(cache.size() - 1);
+    }
+}

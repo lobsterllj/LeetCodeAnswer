@@ -1,0 +1,66 @@
+class Solution {
+    public int trap(int[] height) {
+        int len = height.length;
+        if (len < 3) 
+            return 0;
+        int res = 0;
+        int[] toRight = new int[len];
+        int[] toLeft = new int[len];
+        toLeft[0] = -1;
+        // Deque<Integer> deque = new ArrayDeque();
+        // deque.addLast(0);
+        int lMax = 0;
+        for (int i = 1; i < len; ++i) {
+            if (height[i] >= height[lMax]) {
+                toLeft[i] = -1;
+                lMax = i;
+            } else {
+                toLeft[i] = lMax;
+            }
+            // while (!deque.isEmpty() && height[i] > height[deque.peekLast()]) {
+            //     deque.pollLast();
+            // }
+            // if (deque.isEmpty()){
+            //     toLeft[i] = -1;
+            //     deque.addLast(i);
+            // } else {
+            //     toLeft[i] = deque.peekLast();
+            // }
+        }
+        toRight[len - 1] = -1;
+        // deque = new ArrayDeque();
+        // deque.addLast(len - 1);
+        int rMax = len - 1;
+        for (int i = len - 2; i > -1; --i) {
+            if (height[i] >= height[rMax]) {
+                toRight[i] = -1;
+                rMax = i;
+            } else {
+                toRight[i] = rMax;
+            }
+            // while (!deque.isEmpty() && height[i] > height[deque.peekLast()]) {
+            //     deque.pollLast();
+            // }
+            // if (deque.isEmpty()){
+            //     toRight[i] = -1;
+            //     deque.addLast(i);
+            // } else {
+            //     toRight[i] = deque.peekLast();
+            // }
+        }
+        for (int i = 1; i < len - 1; ++i) {
+            if (toLeft[i] == -1 || toRight[i] == -1) {
+                continue;
+            }
+            res += Math.min(height[toLeft[i]], height[toRight[i]]) - height[i];
+        }
+        // for (int it : toLeft) {
+        //     System.out.print(it + " ");
+        // }
+        // System.out.println();
+        // for (int it : toRight) {
+        //     System.out.print(it + " ");
+        // }
+        return res;
+    }
+}
