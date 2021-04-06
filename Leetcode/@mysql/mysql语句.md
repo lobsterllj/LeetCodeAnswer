@@ -17,6 +17,8 @@ https://blog.csdn.net/shaiguchun9503/article/details/82349050
 
 **2.RANK()**
 
+**rank是关键字 如果需要作为字段名需要'rank'**
+
 定义：RANK()函数，顾名思义排名函数，可以对某一个字段进行排名，这里为什么和ROW_NUMBER()不一样那，ROW_NUMBER()是排序，当存在相同成绩的学生时，ROW_NUMBER()会依次进行排序，他们序号不相同，而Rank()则不一样出现相同的，他们的排名是一样的。下面看例子:
 ![这里写图片描述](mysql%E8%AF%AD%E5%8F%A5.assets/20150718151959229)
 
