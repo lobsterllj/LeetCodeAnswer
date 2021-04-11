@@ -1,0 +1,10 @@
+# Write your MySQL query statement below
+SELECT ee.student_id, ee.course_id,ee.grade FROM(
+SELECT e.student_id, e.course_id, e.grade,
+rank() over (
+    PARTITION BY student_id 
+    ORDER BY grade DESC,course_id ASC
+) rn 
+FROM Enrollments as e
+) as ee
+WHERE ee.rn = 1;

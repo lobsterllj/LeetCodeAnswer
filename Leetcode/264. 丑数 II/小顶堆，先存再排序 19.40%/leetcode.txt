@@ -1,0 +1,46 @@
+class Solution {
+    public int nthUglyNumber(int n) {
+        if (n == 1) {
+            return 1;
+        }
+        PriorityQueue<Long> pq = new PriorityQueue();
+        pq.add(1L);
+        Set<Long> set = new HashSet();
+        set.add(1L);
+        for(int i = 1; i < n; ++i){
+            long temp = pq.poll();
+            long t2 = temp * 2;
+            long t3 = temp * 3;
+            long t5 = temp * 5;
+            if (!set.contains(t2)){
+                set.add(t2);
+                pq.add(t2);
+            }
+            if (!set.contains(t3)){
+                set.add(t3);
+                pq.add(t3);
+            }
+            if (!set.contains(t5)){
+                set.add(t5);
+                pq.add(t5);
+            }
+        }
+        // System.out.println(pq);
+        long res = pq.peek();
+
+        return (int)res;
+
+
+        // int[] dp = new int[n];
+        // dp[0] = 1;
+        // dp[1] = 2;
+        // dp[2] = 3;
+        // for (int i = 3; i < n; ++i) {
+        //    int cache = Math.min(5 * dp[i - 3], 3 * dp[i - 2]);
+        //    cache = Math.min(cache, 2 * dp[i - 1]);
+        //    dp[i] = cache;
+        // }
+        
+        // return dp[n - 1];
+    }
+}

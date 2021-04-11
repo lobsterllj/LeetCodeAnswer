@@ -1,0 +1,44 @@
+class Solution {
+    public int nthUglyNumber(int n) {
+        if (n == 1) {
+            return 1;
+        }
+        int[] dp = new int[n];
+        dp[0] = 1;
+        /*
+        p2,p3,p5均是代表dp数组元素索引的指针
+        dp[i] 一定是由 -1 < j < i 的某个元素dp[j] 乘以{2, 3, 5}得到的
+        且dp[i] 应该是能得到的大于dp[i - 1]的最小可能值
+
+        针对单个指针：dp[p2] * 2 一定小于 dp[p2 + 1] * 2,同理，针对单个指针，结果都具备单调性（不减）
+        针对三个指针选择哪一个：分别计算 dp[p2] * 2, dp[p3] * 3, dp[p5] * 5 取最小值（这样保证取值结果的单调）
+        如果某一个pk被取到，那么应该将此pk++
+        含义是此时这三个指针中pk代表的元素乘以k（dp[pk] * k）能取到大于等于dp[i - 1]的最小值
+        给dp[i] 赋值后，此时的pk位置不能再用来乘以k 来取新值了，将pk向后移动一位。
+
+        针对去重
+        如果temp == dp[i - 1] 那么对于此位从新计算一次即可， 故i-- 抵消for的i++
+        */
+        int p2 = 0;
+        int p3 = 0;
+        int p5 = 0;
+        Set<Integer> visited = new HashSet();
+        for (int i = 1; i < n; i++) {
+            int temp = Math.min(dp[p2] * 2, dp[p3] * 3);
+            temp = Math.min(temp, dp[p5] * 5);
+            if (temp == dp[p2] * 2) p2++;
+            else if (temp == dp[p3] * 3) p3++;
+            else p5++;
+            if (temp == dp[i - 1]) {
+                //去重操作
+                i--;
+                continue;
+            }
+            dp[i] = temp;
+        }
+        // for (int i = 0; i < n; i++) {
+        //     System.out.print(dp[i] + " ");
+        // }
+        return dp[n - 1];
+    }
+}
