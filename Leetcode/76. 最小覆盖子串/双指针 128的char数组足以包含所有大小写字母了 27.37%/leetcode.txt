@@ -1,0 +1,63 @@
+class Solution {
+    // Map<Character, Integer> smap;
+    // Map<Character, Integer> tmap;
+    char[] s_char;
+    char[] t_char;
+
+    public String minWindow(String s, String t) {
+        char[] sc = s.toCharArray();
+        char[] tc = t.toCharArray();
+        int sLen = sc.length;
+        int tLen = tc.length;
+        s_char = new char[128];
+        t_char = new char[128];
+        if (sLen == 0 || tLen == 0) {
+            return "";
+        }
+        // smap = new HashMap();
+        // tmap = new HashMap();
+        for (int i = 0; i < tLen; i++) {
+            // System.out.println("tc[i]: " + (int)tc[i]);
+            t_char[tc[i]]++;
+            // int cnt = tmap.getOrDefault(tc[i], 0) + 1;
+            // tmap.put(tc[i], cnt);
+        }
+        int resIndex = -1;
+        int minLen = Integer.MAX_VALUE;
+        int sta = 0;
+        int end = 0;
+        while (end < sLen) {
+            s_char[sc[end]]++;
+            // int temp = smap.getOrDefault(sc[end], 0) + 1;
+            // smap.put(sc[end], temp);
+//            System.out.println("sta: " + sta);
+//            System.out.println("end: " + end);
+            while (helper() && sta <= end) {
+                if (minLen >= end - sta + 1) {
+                    minLen = end - sta + 1;
+                    resIndex = sta;
+                }
+                s_char[sc[sta]]--;
+                // int cache = smap.get(sc[sta]) - 1;
+                // smap.put(sc[sta], cache);
+                sta++;
+            }
+            end++;
+        }
+        if (resIndex == -1) {
+            return "";
+        }
+        return s.substring(resIndex, resIndex + minLen);
+    }
+
+    public boolean helper() {
+        for (int i = 0; i < 128; ++i) {
+            if (s_char[i] < t_char[i]) return false;
+        }
+        return true;
+        // for (char c : tmap.keySet()) {
+        //     if (!smap.containsKey(c) || smap.get(c) < tmap.get(c)) return false;
+        // }
+        // return true;
+    }
+}
