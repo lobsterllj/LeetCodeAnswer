@@ -1,0 +1,3 @@
+# Write your MySQL query statement below
+SELECT e4.Name AS 'Employee' FROM Employee AS e4 INNER JOIN Employee AS e3
+on e4.ManagerId = e3.id AND e4.Salary > e3.Salary
