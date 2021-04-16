@@ -4,7 +4,196 @@
 
 
 
+# Leetcode 题解
 
+
+
+
+
+
+
+## 查询
+
+
+
+### 简单查询
+
+#### [176. 第二高的薪水](https://leetcode-cn.com/problems/second-highest-salary/)
+
+<img src="mysql%E8%AF%AD%E5%8F%A5.assets/image-20210416225252044.png" alt="image-20210416225252044" style="zoom:67%;" />
+
+```mysql
+SELECT (
+SELECT DISTINCT Salary
+FROM Employee 
+ORDER BY Salary DESC LIMIT 1,1) 
+AS SecondHighestSalary;
+```
+
+
+
+
+
+
+
+
+
+
+
+### 连接查询
+
+#### [1777. 每家商店的产品价格](https://leetcode-cn.com/problems/products-price-for-each-store/)
+
+<img src="mysql%E8%AF%AD%E5%8F%A5.assets/image-20210416195824168.png" alt="image-20210416195824168" style="zoom:50%;" />
+
+```mysql
+SELECT distinct p.product_id, a.price AS store1, b.price AS store2, c.price AS store3
+FROM Products p
+LEFT JOIN Products a on p.product_id = a.product_id AND a.store = 'store1'
+LEFT JOIN Products b on p.product_id = b.product_id AND b.store = 'store2'
+LEFT JOIN Products c on p.product_id = c.product_id AND c.store = 'store3'
+```
+
+
+
+#### [175. 组合两个表](https://leetcode-cn.com/problems/combine-two-tables/)
+
+![image-20210416224421787](mysql%E8%AF%AD%E5%8F%A5.assets/image-20210416224421787.png)![image-20210416224431130](mysql%E8%AF%AD%E5%8F%A5.assets/image-20210416224431130.png)
+
+![image-20210416224511008](mysql%E8%AF%AD%E5%8F%A5.assets/image-20210416224511008.png)
+
+```mysql
+select p.FirstName, p.LastName, a.City, a.State 
+from Person as p left join Address as a on p.PersonId = a.PersonId;
+```
+
+
+
+
+
+### 函数查询
+
+#### [177. 第N高的薪水](https://leetcode-cn.com/problems/nth-highest-salary/)
+
+<img src="mysql%E8%AF%AD%E5%8F%A5.assets/image-20210416230316037.png" alt="image-20210416230316037" style="zoom:67%;" />
+
+```mysql
+CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
+BEGIN
+  SET N = N - 1;
+  RETURN (
+      # Write your MySQL query statement below.
+      SELECT DISTINCT Salary FROM Employee Order By Salary DESC LIMIT N,1
+  );
+END
+```
+
+
+
+
+
+
+
+## 删除
+
+
+
+
+
+### [196. 删除重复的电子邮箱](https://leetcode-cn.com/problems/delete-duplicate-emails/)
+
+<img src="mysql%E8%AF%AD%E5%8F%A5.assets/image-20210416191451712.png" alt="image-20210416191451712" style="zoom:50%;" />
+
+多表删除，把 p1 大于 p2 的ID删除了
+
+```mysql
+DELETE p1 FROM Person p1, Person p2
+-- 这里FROM Person p1, Person p2 相当于 p1 与 p2 的笛卡尔积，笛卡尔积语法就是select * from a，b；
+WHERE p1.Email = p2.Email AND p1.Id > p2.Id
+```
+
+![image-20210416190844353](mysql%E8%AF%AD%E5%8F%A5.assets/image-20210416190844353.png)
+
+
+
+如果把 p2 和 p1 对调
+
+```mysql
+DELETE p2 FROM Person p1, Person p2
+WHERE p1.Email = p2.Email AND p1.Id > p2.Id
+```
+
+![image-20210416191129202](mysql%E8%AF%AD%E5%8F%A5.assets/image-20210416191129202.png)
+
+
+
+
+
+
+
+![image-20210416223327782](mysql%E8%AF%AD%E5%8F%A5.assets/image-20210416223327782.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 关键字
+
+
+
+
+
+
+
+
+
+## DISTINCT
+
+去重
+
+
+
+
+
+## LIMIT
+
+LIMIT x    显示前x条
+
+LIMIT x,y     跳过x，显示y条
+
+```mysql
+SELECT * FROM table1;
+```
+
+![image-20210416230035726](mysql%E8%AF%AD%E5%8F%A5.assets/image-20210416230035726.png)
+
+```mysql
+SELECT * FROM table1 limit 1;
+```
+
+![image-20210416230117218](mysql%E8%AF%AD%E5%8F%A5.assets/image-20210416230117218.png)
+
+```mysql
+SELECT * FROM table1 limit 1, 1;
+```
+
+![image-20210416230142793](mysql%E8%AF%AD%E5%8F%A5.assets/image-20210416230142793.png)
+
+
+
+
+
+
+
+# 函数
 
 ## sql 四大排名函数（ROW_NUMBER、RANK、DENSE_RANK、NTILE）简介
 
@@ -48,11 +237,21 @@ DENSE_RANK()密集的排名他和RANK()区别在于，排名的连续性，DENSE
 
 
 
+
+# 常见错误
+
+
 ## Every derived table must have its own alias（sql语句错误解决方法）
 
 https://blog.csdn.net/qq_32863631/article/details/83024322
 
--- SELECT * FROM(SELECT * FROM(SELECT * FROM Employee AS A1) AS A2) AS A3
+
+
+```mysql
+SELECT * FROM(SELECT * FROM(SELECT * FROM Employee AS A1) AS A2) AS A3
+```
+
+
 
 1. 在做多表查询，或者查询的时候产生新的表的时候会出现这个错误：Every derived table must have its own alias（每一个派生出来的表都必须有一个自己的别名）。
 
@@ -90,4 +289,16 @@ from stock WHERE state = 1 group by org_id,material_id,state having count(*) > 1
 这样就解决了问题；
 
 
+
+
+
+## [Error Code: 1175](https://www.cnblogs.com/shy1766IT/p/10749859.html)
+
+mysql在执行删除更新语句时报这种错误，是因为在mysql在safe-updates模式中，如果你where后跟的条件不是主键id，那么就会出现这种错误。
+
+解决方式有两种
+
+   1、SET SQL_SAFE_UPDATES = 0;执行该命令更改mysql数据库模式。
+
+   2、在where判断条件中跟上主键id  例如：delete from firstmysqldatabase.user where UserName='zhangsan' and ID>=0;
 

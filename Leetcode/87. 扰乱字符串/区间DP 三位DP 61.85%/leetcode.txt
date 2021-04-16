@@ -1,0 +1,42 @@
+class Solution {
+    public boolean isScramble(String s1, String s2) {
+        char[] cs1 = s1.toCharArray();
+        char[] cs2 = s2.toCharArray();
+        int n = cs1.length;
+
+        // int[] cnt1 = new int[26];
+        // int[] cnt2 = new int[26];
+        // for (int i = 0; i < n; i++) {
+        //     cnt1[cs1[i] - 'a']++;
+        //     cnt2[cs2[i] - 'a']++;
+        // }
+        // for (int i = 0; i < 26; i++) {
+        //     if (cnt1[i] != cnt2[i]) return false;
+        // }
+
+        boolean[][][] isSc = new boolean[n][n][n + 1];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                isSc[i][j][1] = cs1[i] == cs2[j];
+            }
+        }
+
+        for (int len = 2; len <= n; len++) {
+            for (int i = 0; i + len <= n; i++) {
+                for (int j = 0; j + len <= n; j++) {
+                    for (int split = 1; split < len; split++) {
+                        if (isSc[i][j][split] && isSc[i + split][j + split][len - split]) {
+                            isSc[i][j][len] = true;
+                            break;
+                        }
+                        if (isSc[i][j + len - split][split] && isSc[i + split][j][len - split]) {
+                            isSc[i][j][len] = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return isSc[0][0][n];
+    }
+}
