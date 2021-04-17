@@ -32,7 +32,19 @@ AS SecondHighestSalary;
 
 
 
+#### [595. 大的国家](https://leetcode-cn.com/problems/big-countries/)
 
+<img src="mysql%E8%AF%AD%E5%8F%A5.assets/image-20210417150830011.png" alt="image-20210417150830011" style="zoom:67%;" />
+
+<img src="mysql%E8%AF%AD%E5%8F%A5.assets/image-20210417150844608.png" alt="image-20210417150844608" style="zoom:67%;" />
+
+
+
+```mysql
+SELECT name,population,area 
+FROM World
+WHERE population > 25000000 or area > 3000000;
+```
 
 
 
@@ -71,7 +83,72 @@ from Person as p left join Address as a on p.PersonId = a.PersonId;
 
 
 
+
+
+#### [180. 连续出现的数字](https://leetcode-cn.com/problems/consecutive-numbers/)
+
+笛卡尔积，多表查询
+
+![image-20210417150302935](mysql%E8%AF%AD%E5%8F%A5.assets/image-20210417150302935.png)
+
+<img src="mysql%E8%AF%AD%E5%8F%A5.assets/image-20210417150312865.png" alt="image-20210417150312865" style="zoom:67%;" />
+
+```mysql
+SELECT DISTINCT a.Num AS ConsecutiveNums
+FROM Logs AS a, Logs AS b, Logs AS c
+WHERE a.Num = b.Num AND b.Num = c.Num AND a.Id = b.Id - 1 AND b.Id = c.Id - 1
+```
+
+
+
+
+
+#### [181. 超过经理收入的员工](https://leetcode-cn.com/problems/employees-earning-more-than-their-managers/)
+
+笛卡尔积，多表查询
+
+<img src="mysql%E8%AF%AD%E5%8F%A5.assets/image-20210417150631356.png" alt="image-20210417150631356" style="zoom:67%;" />
+
+```mysql
+SELECT e4.Name AS 'Employee' FROM Employee AS e4 ,Employee AS e3
+WHERE e4.ManagerId = e3.id AND e4.Salary > e3.Salary
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 ### 函数查询
+
+#### [178. 分数排名](https://leetcode-cn.com/problems/rank-scores/)
+
+<img src="mysql%E8%AF%AD%E5%8F%A5.assets/image-20210417150518144.png" alt="image-20210417150518144" style="zoom:67%;" />
+
+
+
+```mysql
+SELECT 
+Score,
+DENSE_RANK() over (ORDER BY Score DESC) 'Rank'
+FROM
+Scores
+```
+
+
+
+
+
+
+
+
 
 #### [177. 第N高的薪水](https://leetcode-cn.com/problems/nth-highest-salary/)
 
@@ -87,6 +164,119 @@ BEGIN
   );
 END
 ```
+
+
+
+
+
+#### [184. 部门工资最高的员工](https://leetcode-cn.com/problems/department-highest-salary/)
+
+<img src="mysql%E8%AF%AD%E5%8F%A5.assets/image-20210417142627381.png" alt="image-20210417142627381" style="zoom:67%;" />
+
+
+
+```mysql
+SELECT Department, Employee, Salary FROM(
+SELECT d.Name as Department, e.Name as Employee, Salary, rank() over (
+PARTITION BY DepartmentId ORDER BY Salary DESC) ranknum 
+FROM Employee as e JOIN Department as d where e.DepartmentId = d.Id 
+)as t where t.ranknum = 1
+```
+
+
+
+
+
+拓展一下，如果只使用Employee表，查询每个部门工资最高的员工对应的 Id, salary 和 department Id
+
+先按照不同部门partition，按照salary进行排序编号，具体sql如下：
+
+```mysql
+SELECT e.DepartmentId, e.Name as Employee, Salary, rank() over (
+PARTITION BY DepartmentId ORDER BY Salary DESC) ranknum
+FROM Employee e 
+```
+
+```mysql
+{"headers": ["DepartmentId", "Employee", "Salary", "ranknum"], "values": 
+[[1, "Jim", 90000, 1], 
+ [1, "Max", 90000, 1], 
+ [1, "Joe", 70000, 3], 
+ [2, "Henry", 80000, 1], 
+ [2, "Sam", 60000, 2]]}
+```
+
+
+
+更具第一步查询的结果，按照ranknum字段进行筛选，完整sql如下：
+
+```mysql
+SELECT r.DepartmentId, r.Employee, r.Salary FROM(
+SELECT e.DepartmentId, e.Name as Employee, Salary, rank() over (
+PARTITION BY DepartmentId ORDER BY Salary DESC) ranknum
+FROM Employee e 
+) AS r where r.ranknum = 1
+```
+
+```mysql
+{"headers": ["DepartmentId", "Employee", "Salary"], "values": 
+[[1, "Jim", 90000], 
+ [1, "Max", 90000], 
+ [2, "Henry", 80000]]}
+```
+
+
+
+
+
+#### [185. 部门工资前三高的所有员工](https://leetcode-cn.com/problems/department-top-three-salaries/)
+
+<img src="mysql%E8%AF%AD%E5%8F%A5.assets/image-20210417145942539.png" alt="image-20210417145942539" style="zoom:67%;" />
+
+<img src="mysql%E8%AF%AD%E5%8F%A5.assets/image-20210417150007952.png" alt="image-20210417150007952" style="zoom:67%;" />
+
+
+
+```mysql
+SELECT d.Name AS Department, Employee, Salary FROM(
+    SELECT e.Name AS Employee, e.Salary, e.DepartmentId FROM(
+        SELECT DepartmentId, Name, Salary, dense_rank() over(
+            PARTITION BY DepartmentId ORDER BY Salary DESC
+            -- 按照不同的DepartmentId分别降序排名
+        ) as rankn FROM Employee AS f
+        -- 给不同的工资水平编号 dense_rank() eg: 90 90 80 对应 1 1 2
+    )e WHERE e.rankn < 4
+    -- 每一个子表最好都取一个别名
+)AS e1 JOIN Department AS d ON e1.DepartmentId = d.Id
+```
+
+
+
+
+
+
+
+#### [1112. 每位学生的最高成绩](https://leetcode-cn.com/problems/highest-grade-for-each-student/)
+
+<img src="mysql%E8%AF%AD%E5%8F%A5.assets/image-20210417151047521.png" alt="image-20210417151047521" style="zoom:67%;" />
+
+```mysql
+SELECT ee.student_id, ee.course_id,ee.grade FROM(
+SELECT e.student_id, e.course_id, e.grade,
+rank() over (
+    PARTITION BY student_id 
+    ORDER BY grade DESC,course_id ASC
+) rn 
+FROM Enrollments as e
+) as ee
+WHERE ee.rn = 1;
+```
+
+
+
+
+
+
 
 
 
@@ -195,16 +385,26 @@ SELECT * FROM table1 limit 1, 1;
 
 # 函数
 
+
+
+
+
 ## sql 四大排名函数（ROW_NUMBER、RANK、DENSE_RANK、NTILE）简介
 
 https://blog.csdn.net/shaiguchun9503/article/details/82349050
+
+```mysql
+SELECT rank() over (
+PARTITION BY DepartmentId ORDER BY Salary DESC) 
+AS ranknum FROM Employee
+```
 
 **1.ROW_NUMBER()**
 
 **定义**：ROW_NUMBER()函数作用就是将select查询到的数据进行排序，每一条数据加一个序号，他不能用做于学生成绩的排名，一般多用于分页查询， 
 比如查询前10个 查询10-100个学生。
 
-**2.RANK()**
+**2.rank()**
 
 **rank是关键字 如果需要作为字段名需要'rank'**
 
@@ -221,7 +421,7 @@ https://blog.csdn.net/shaiguchun9503/article/details/82349050
 
 DENSE_RANK()密集的排名他和RANK()区别在于，排名的连续性，DENSE_RANK()排名是连续的，RANK()是跳跃的排名，所以一般情况下用的排名函数就是RANK()。
 
-**4.NTILE()**
+**4.ntile()**
 
 定义：NTILE()函数是将有序分区中的行分发到指定数目的组中，各个组有编号，编号从1开始，就像我们说的’分区’一样 ，分为几个区，一个区会有多少个。
 
@@ -241,7 +441,8 @@ DENSE_RANK()密集的排名他和RANK()区别在于，排名的连续性，DENSE
 # 常见错误
 
 
-## Every derived table must have its own alias（sql语句错误解决方法）
+
+## Every derived table must have its own alias
 
 https://blog.csdn.net/qq_32863631/article/details/83024322
 
@@ -292,7 +493,7 @@ from stock WHERE state = 1 group by org_id,material_id,state having count(*) > 1
 
 
 
-## [Error Code: 1175](https://www.cnblogs.com/shy1766IT/p/10749859.html)
+## [Error Code: 1175（执行删除更新语句）](https://www.cnblogs.com/shy1766IT/p/10749859.html)
 
 mysql在执行删除更新语句时报这种错误，是因为在mysql在safe-updates模式中，如果你where后跟的条件不是主键id，那么就会出现这种错误。
 
